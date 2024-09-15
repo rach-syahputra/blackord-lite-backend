@@ -4,6 +4,7 @@ const {
   updateUserByUsername,
   deleteUserByUsername
 } = require('./user.repository')
+const bcrypt = require('bcrypt')
 
 const getUser = async (username) => {
   const user = await findUserByUsername(username)
@@ -16,6 +17,11 @@ const getUser = async (username) => {
 }
 
 const addUser = async (userData) => {
+  const salt = await bcrypt.genSalt()
+  const hashedPassword = await bcrypt.hash(userData.password, salt)
+
+  userData.password = hashedPassword
+
   const user = await createUser(userData)
 
   return user

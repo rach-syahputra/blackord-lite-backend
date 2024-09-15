@@ -1,5 +1,4 @@
 const prisma = require('../db')
-const bcrypt = require('bcrypt')
 
 const findUserByUsername = async (username) => {
   const user = await prisma.user.findUnique({
@@ -17,14 +16,11 @@ const findUserByUsername = async (username) => {
 }
 
 const createUser = async (userData) => {
-  const salt = await bcrypt.genSalt()
-  const hashedPassword = await bcrypt.hash(userData.password, salt)
-
   const user = await prisma.user.create({
     data: {
       username: userData.username,
       email: userData.email,
-      password: hashedPassword,
+      password: userData.password,
       roleId: userData.roleId
     }
   })
