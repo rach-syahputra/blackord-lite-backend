@@ -37,7 +37,7 @@ model Listener {
 }
 
 model Artist {
-  user       User    @relation(fields: [username], references: [username])
+  user       User    @relation(fields: [username], references: [username], onDelete: Cascade)
   username   String  @id
   artistName String
   image      String
@@ -47,17 +47,18 @@ model Artist {
 
 model Album {
   id             String   @id
-  artist         Artist   @relation(fields: [artistUsername], references: [username])
+  artist         Artist   @relation(fields: [artistUsername], references: [username], onDelete: Cascade)
   artistUsername String
   title          String
   genre          String
   createdAt      DateTime @default(now())
+  image          String
   Song           Song[]
 }
 
 model Song {
   id       String @id
-  album    Album  @relation(fields: [albumId], references: [id])
+  album    Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
   albumId  String
   title    String
   duration Int
