@@ -6,11 +6,10 @@ const {
   deleteUser,
   getAllUsers
 } = require('./user.service')
-const { verifyToken } = require('../middleware/verifyToken')
 
 const router = express.Router()
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const users = await getAllUsers()
 
