@@ -67,7 +67,7 @@ const getUserByRefreshToken = async (refreshToken) => {
 
 const putAccessToken = ({ username, email }) => {
   return jwt.sign({ username, email }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '30s'
+    expiresIn: '1h'
   })
 }
 
