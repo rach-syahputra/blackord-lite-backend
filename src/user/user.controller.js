@@ -1,7 +1,29 @@
 const express = require('express')
-const { getUser, addUser, updateUser, deleteUser } = require('./user.service')
+const {
+  getUser,
+  addUser,
+  updateUser,
+  deleteUser,
+  getAllUsers
+} = require('./user.service')
+const { verifyToken } = require('../middleware/verifyToken')
 
 const router = express.Router()
+
+router.get('/', verifyToken, async (req, res) => {
+  try {
+    const users = await getAllUsers()
+
+    res.status(200).json({
+      message: 'Users successfully retrieved',
+      data: users
+    })
+  } catch (error) {
+    res.status(404).json({
+      message: error.message
+    })
+  }
+})
 
 router.get('/:username', async (req, res) => {
   try {

@@ -2,9 +2,16 @@ const {
   findUserByUsername,
   createUser,
   updateUserByUsername,
-  deleteUserByUsername
+  deleteUserByUsername,
+  findAllUsers
 } = require('./user.repository')
 const bcrypt = require('bcrypt')
+
+const getAllUsers = async () => {
+  const users = await findAllUsers()
+
+  return users
+}
 
 const getUser = async (username) => {
   const user = await findUserByUsername(username)
@@ -41,6 +48,7 @@ const deleteUser = async (username) => {
 }
 
 module.exports = {
+  getAllUsers,
   getUser,
   addUser,
   updateUser,

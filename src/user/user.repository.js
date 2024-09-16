@@ -1,5 +1,21 @@
 const prisma = require('../db')
 
+const findAllUsers = async () => {
+  const users = await prisma.user.findMany({
+    select: {
+      username: true,
+      email: true,
+      roleId: true,
+      createdAt: true
+    },
+    orderBy: {
+      username: 'asc'
+    }
+  })
+
+  return users
+}
+
 const findUserByUsername = async (username) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -58,6 +74,7 @@ const deleteUserByUsername = async (username) => {
 }
 
 module.exports = {
+  findAllUsers,
   findUserByUsername,
   findUserByRefreshToken,
   createUser,
