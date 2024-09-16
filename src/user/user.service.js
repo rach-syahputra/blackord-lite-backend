@@ -13,7 +13,10 @@ const getUser = async (username) => {
     throw Error('User not found')
   }
 
-  return user
+  // eslint-disable-next-line no-unused-vars
+  const { password, ...other } = user
+
+  return other
 }
 
 const addUser = async (userData) => {

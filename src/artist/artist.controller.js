@@ -5,10 +5,11 @@ const {
   updateArtist,
   getAllArtists
 } = require('./artist.service')
+const { verifyToken } = require('../middleware/verifyToken')
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const artists = await getAllArtists()
 
@@ -23,7 +24,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:username', async (req, res) => {
+router.get('/:username', verifyToken, async (req, res) => {
   try {
     const username = req.params.username
     const artist = await getArtist(username)
@@ -55,7 +56,7 @@ router.post('/', async (req, res) => {
     })
   }
 })
-router.put('/:username', async (req, res) => {
+router.put('/:username', verifyToken, async (req, res) => {
   try {
     const username = req.params.username
     const artistData = req.body

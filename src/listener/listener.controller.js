@@ -4,10 +4,11 @@ const {
   addListener,
   updateListener
 } = require('./listener.service')
+const { verifyToken } = require('../middleware/verifyToken')
 
 const router = express.Router()
 
-router.get('/:username', async (req, res) => {
+router.get('/:username', verifyToken, async (req, res) => {
   try {
     const username = req.params.username
     const listener = await getListener(username)
@@ -40,7 +41,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.put('/:username', async (req, res) => {
+router.put('/:username', verifyToken, async (req, res) => {
   try {
     const username = req.params.username
     const listenerData = req.body

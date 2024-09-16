@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  username  String     @id
-  email     String     @unique
-  password  String
-  createdAt DateTime   @default(now())
-  role      Role       @relation(fields: [roleId], references: [id])
-  roleId    Int
-  Listener  Listener[]
-  Artist    Artist[]
+  username     String     @id
+  email        String     @unique
+  password     String
+  createdAt    DateTime   @default(now())
+  role         Role       @relation(fields: [roleId], references: [id])
+  roleId       Int
+  Listener     Listener[]
+  Artist       Artist[]
+  refreshToken String     @default("") @db.VarChar(255)
 }
 
 model Role {
@@ -31,7 +32,7 @@ model Role {
 }
 
 model Listener {
-  user     User   @relation(fields: [username], references: [username])
+  user     User   @relation(fields: [username], references: [username], onDelete: Cascade)
   username String @id
   image    String
 }

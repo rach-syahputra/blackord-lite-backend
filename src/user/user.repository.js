@@ -4,11 +4,16 @@ const findUserByUsername = async (username) => {
   const user = await prisma.user.findUnique({
     where: {
       username
-    },
-    select: {
-      username: true,
-      email: true,
-      roleId: true
+    }
+  })
+
+  return user
+}
+
+const findUserByRefreshToken = async (refreshToken) => {
+  const user = await prisma.user.findMany({
+    where: {
+      refreshToken
     }
   })
 
@@ -21,7 +26,8 @@ const createUser = async (userData) => {
       username: userData.username,
       email: userData.email,
       password: userData.password,
-      roleId: userData.roleId
+      roleId: userData.roleId,
+      refreshToken: ''
     }
   })
 
@@ -35,7 +41,8 @@ const updateUserByUsername = async (username, userData) => {
     },
     data: {
       email: userData.email,
-      password: userData.password
+      password: userData.password,
+      refreshToken: userData.refreshToken
     }
   })
 
@@ -52,6 +59,7 @@ const deleteUserByUsername = async (username) => {
 
 module.exports = {
   findUserByUsername,
+  findUserByRefreshToken,
   createUser,
   updateUserByUsername,
   deleteUserByUsername

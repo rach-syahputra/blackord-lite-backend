@@ -7,9 +7,6 @@ const findAlbumCount = async (artistUsername) => {
     }
   })
 
-  console.log(artistUsername)
-  console.log(albumCount)
-
   return albumCount
 }
 

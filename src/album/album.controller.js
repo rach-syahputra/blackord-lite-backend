@@ -5,10 +5,11 @@ const {
   addAlbum,
   deleteAlbum
 } = require('./album.service')
+const { verifyToken } = require('../middleware/verifyToken')
 
 const router = express.Router()
 
-router.get('/artists/:username', async (req, res) => {
+router.get('/artists/:username', verifyToken, async (req, res) => {
   try {
     const artistUsername = req.params.username
     const albums = await getAlbumsFromArtist(artistUsername)
@@ -24,7 +25,7 @@ router.get('/artists/:username', async (req, res) => {
   }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
   try {
     const id = req.params.id
     const album = await getAlbum(id)
@@ -40,7 +41,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   try {
     const albumData = req.body
 
@@ -57,7 +58,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   try {
     const id = req.params.id
 
