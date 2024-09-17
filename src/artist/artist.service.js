@@ -1,41 +1,36 @@
-const {
-  findArtistByUsername,
-  createArtist,
-  updateArtistByUsername,
-  findAllArtists
-} = require('./artist.repository')
+const artistRepository = require('./artist.repository')
 
-const getAllArtists = async () => {
-  const artists = await findAllArtists()
+const artistService = {
+  async getAllArtists() {
+    const artists = await artistRepository.findAllArtists()
 
-  return artists
-}
+    return artists
+  },
 
-const getArtist = async (username) => {
-  const artist = await findArtistByUsername(username)
+  async getArtist(username) {
+    const artist = await artistRepository.findArtistByUsername(username)
 
-  if (!artist) {
-    throw Error('Artist not found')
+    if (!artist) {
+      throw Error('Artist not found')
+    }
+
+    return artist
+  },
+
+  async addArtist(artistData) {
+    const artist = await artistRepository.createArtist(artistData)
+
+    return artist
+  },
+
+  async updateArtist(username, artistData) {
+    const artist = await artistRepository.updateArtistByUsername(
+      username,
+      artistData
+    )
+
+    return artist
   }
-
-  return artist
 }
 
-const addArtist = async (artistData) => {
-  const artist = await createArtist(artistData)
-
-  return artist
-}
-
-const updateArtist = async (username, artistData) => {
-  const artist = await updateArtistByUsername(username, artistData)
-
-  return artist
-}
-
-module.exports = {
-  getAllArtists,
-  getArtist,
-  addArtist,
-  updateArtist
-}
+module.exports = artistService
