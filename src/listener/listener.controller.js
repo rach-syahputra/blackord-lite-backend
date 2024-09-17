@@ -36,11 +36,17 @@ const listenerController = {
 
   async updateListener(req, res) {
     try {
-      const username = req.params.username
-      const listenerData = req.body
+      const tokenUsername = req.username
+      const listenerUsername = req.params.username
+      if (tokenUsername !== listenerUsername) {
+        return res.status(401).json({
+          message: 'You are unauthorized'
+        })
+      }
 
+      const listenerData = req.body
       const listener = await listenerService.updateListener(
-        username,
+        listenerUsername,
         listenerData
       )
 
