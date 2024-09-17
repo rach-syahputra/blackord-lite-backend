@@ -51,10 +51,19 @@ const artistController = {
 
   async updateArtist(req, res) {
     try {
-      const username = req.username
-      const artistData = req.body
+      const tokenUsername = req.username
+      const artistUsername = req.params.username
+      if (tokenUsername !== artistUsername) {
+        return res.status(401).json({
+          message: 'You are unauthorized'
+        })
+      }
 
-      const artist = await artistService.updateArtist(username, artistData)
+      const artistData = req.body
+      const artist = await artistService.updateArtist(
+        artistUsername,
+        artistData
+      )
 
       res.status(200).json({
         message: 'Artist updated successfully',
