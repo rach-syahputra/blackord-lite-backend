@@ -1,33 +1,30 @@
-const {
-  findListenerByUsername,
-  createListener,
-  updateListenerByUsername
-} = require('./listener.repository')
+const listenerRepository = require('./listener.repository')
 
-const getListener = async (username) => {
-  const listener = await findListenerByUsername(username)
+const listenerService = {
+  async getListener(username) {
+    const listener = await listenerRepository.findListenerByUsername(username)
 
-  if (!listener) {
-    throw Error('Listener not found')
+    if (!listener) {
+      throw Error('Listener not found')
+    }
+
+    return listener
+  },
+
+  async addListener(listenerData) {
+    const listener = await listenerRepository.createListener(listenerData)
+
+    return listener
+  },
+
+  async updateListener(username, listenerData) {
+    const listener = await listenerRepository.updateListenerByUsername(
+      username,
+      listenerData
+    )
+
+    return listener
   }
-
-  return listener
 }
 
-const addListener = async (listenerData) => {
-  const listener = await createListener(listenerData)
-
-  return listener
-}
-
-const updateListener = async (username, listenerData) => {
-  const listener = await updateListenerByUsername(username, listenerData)
-
-  return listener
-}
-
-module.exports = {
-  getListener,
-  addListener,
-  updateListener
-}
+module.exports = listenerService

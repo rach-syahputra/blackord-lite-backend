@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser')
 
 const authRoutes = require('./auth/auth.route')
 const userRoutes = require('./user/user.route')
-const listenerController = require('./listener/listener.controller')
+const listenerRoutes = require('./listener/listener.route')
 const artistController = require('./artist/artist.controller')
 const albumController = require('./album/album.controller')
 const songController = require('./song/song.controller')
@@ -18,7 +18,7 @@ const PORT = process.env.PORT
 
 app.use('/auth', authRoutes)
 app.use('/users', userRoutes)
-app.use('/listeners', listenerController)
+app.use('/listeners', listenerRoutes)
 app.use('/artists', artistController)
 app.use('/albums', albumController)
 app.use('/songs', songController)
