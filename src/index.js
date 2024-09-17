@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 
 const authController = require('./auth/auth.controller')
-const userController = require('./user/user.controller')
+const userRoutes = require('./user/user.route')
 const listenerController = require('./listener/listener.controller')
 const artistController = require('./artist/artist.controller')
 const albumController = require('./album/album.controller')
@@ -17,7 +17,7 @@ dotenv.config()
 const PORT = process.env.PORT
 
 app.use('/auth', authController)
-app.use('/users', userController)
+app.use('/users', userRoutes)
 app.use('/listeners', listenerController)
 app.use('/artists', artistController)
 app.use('/albums', albumController)
