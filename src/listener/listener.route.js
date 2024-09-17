@@ -1,5 +1,5 @@
 const express = require('express')
-const { verifyToken } = require('../middleware/verifyToken')
+const { verifyToken } = require('../middleware/verification')
 const listenerController = require('./listener.controller')
 
 const router = express.Router()
