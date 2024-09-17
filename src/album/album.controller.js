@@ -53,10 +53,10 @@ const albumController = {
 
   async deleteAlbum(req, res) {
     try {
-      const usernameFromToken = req.username
       const id = req.params.id
-
       const album = await albumService.getAlbum(id)
+
+      const usernameFromToken = req.username
       if (album.artistUsername !== usernameFromToken) {
         return res.status(401).json({
           message: 'You are unauthorized'
