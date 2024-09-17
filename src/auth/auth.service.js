@@ -5,20 +5,20 @@ const bcrypt = require('bcrypt')
 
 const authService = {
   async login(userData) {
-    const { username, email, password } = userData
-
-    const user = await userRepository.findUserByUsername(username)
+    const user = await userRepository.findUserByUsername(userData.username)
     if (!user) {
       throw Error('User not found')
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password)
+    const { username, password, email, roleId } = user
+
+    const passwordMatch = await bcrypt.compare(userData.password, password)
     if (!passwordMatch) {
       throw Error('Wrong username or password')
     }
 
-    const accessToken = await this.putAccessToken({ username, email })
-    const refreshToken = await this.putRefreshToken({ username, email })
+    const accessToken = await this.putAccessToken({ username, email, roleId })
+    const refreshToken = await this.putRefreshToken({ username, email, roleId })
 
     await userRepository.updateUserByUsername(username, { refreshToken })
 
@@ -34,9 +34,13 @@ const authService = {
       throw Error('User not found')
     }
 
-    const { username, email } = user
+    const { username, email, roleId } = user
 
-    const newAccessToken = await this.putAccessToken({ username, email })
+    const newAccessToken = await this.putAccessToken({
+      username,
+      email,
+      roleId
+    })
 
     return newAccessToken
   },
@@ -66,14 +70,14 @@ const authService = {
     return user[0]
   },
 
-  async putAccessToken({ username, email }) {
-    return jwt.sign({ username, email }, process.env.ACCESS_TOKEN_SECRET, {
+  async putAccessToken(userData) {
+    return jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: '1h'
     })
   },
 
-  async putRefreshToken({ username, email }) {
-    return jwt.sign({ username, email }, process.env.REFRESH_TOKEN_SECRET, {
+  async putRefreshToken(userData) {
+    return jwt.sign(userData, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: '1d'
     })
   }
