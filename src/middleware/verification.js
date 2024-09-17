@@ -20,19 +20,6 @@ const verification = {
       req.username = decoded.username
       next()
     })
-  },
-
-  async verifyArtist(req, res, next) {
-    const usernameFromToken = req.username
-    const username = req.params.username
-
-    if (usernameFromToken !== username) {
-      return res.status(401).json({
-        message: 'You are unauthorized'
-      })
-    }
-
-    next()
   }
 }
 
