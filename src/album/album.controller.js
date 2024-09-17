@@ -1,77 +1,70 @@
-const express = require('express')
-const {
-  getAlbumsFromArtist,
-  getAlbum,
-  addAlbum,
-  deleteAlbum
-} = require('./album.service')
-const { verifyToken } = require('../middleware/verifyToken')
+const albumService = require('./album.service')
 
-const router = express.Router()
+const albumController = {
+  async getAlbumsFromArtist(req, res) {
+    try {
+      const artistUsername = req.params.username
+      const albums = await albumService.getAlbumsFromArtist(artistUsername)
 
-router.get('/artists/:username', verifyToken, async (req, res) => {
-  try {
-    const artistUsername = req.params.username
-    const albums = await getAlbumsFromArtist(artistUsername)
+      res.status(200).json({
+        message: 'Albums from artist successfully retrieved',
+        data: albums
+      })
+    } catch (error) {
+      res.status(404).json({
+        message: error.message
+      })
+    }
+  },
 
-    res.status(200).json({
-      message: 'Albums from artist successfully retrieved',
-      data: albums
-    })
-  } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
+  async getAlbum(req, res) {
+    try {
+      const id = req.params.id
+      const album = await albumService.getAlbum(id)
+
+      res.status(200).json({
+        message: 'Album successfully retrieved',
+        data: album
+      })
+    } catch (error) {
+      res.status(404).json({
+        message: error.message
+      })
+    }
+  },
+
+  async addAlbum(req, res) {
+    try {
+      const albumData = req.body
+
+      const album = await albumService.addAlbum(albumData)
+
+      res.status(201).json({
+        message: 'Album added successfully',
+        data: album
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: error.message
+      })
+    }
+  },
+
+  async deleteAlbum(req, res) {
+    try {
+      const id = req.params.id
+
+      await albumService.deleteAlbum(id)
+
+      res.status(200).json({
+        message: 'Album deleted successfully'
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: error.message
+      })
+    }
   }
-})
+}
 
-router.get('/:id', verifyToken, async (req, res) => {
-  try {
-    const id = req.params.id
-    const album = await getAlbum(id)
-
-    res.status(200).json({
-      message: 'Album successfully retrieved',
-      data: album
-    })
-  } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
-  }
-})
-
-router.post('/', verifyToken, async (req, res) => {
-  try {
-    const albumData = req.body
-
-    const album = await addAlbum(albumData)
-
-    res.status(201).json({
-      message: 'Album added successfully',
-      data: album
-    })
-  } catch (error) {
-    res.status(400).json({
-      message: error.message
-    })
-  }
-})
-
-router.delete('/:id', verifyToken, async (req, res) => {
-  try {
-    const id = req.params.id
-
-    await deleteAlbum(id)
-
-    res.status(200).json({
-      message: 'Album deleted successfully'
-    })
-  } catch (error) {
-    res.status(400).json({
-      message: error.message
-    })
-  }
-})
-
-module.exports = router
+module.exports = albumController

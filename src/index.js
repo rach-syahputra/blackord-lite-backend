@@ -6,7 +6,7 @@ const authRoutes = require('./auth/auth.route')
 const userRoutes = require('./user/user.route')
 const listenerRoutes = require('./listener/listener.route')
 const artistRoutes = require('./artist/artist.route')
-const albumController = require('./album/album.controller')
+const albumRoutes = require('./album/album.route')
 const songController = require('./song/song.controller')
 
 const app = express()
@@ -20,7 +20,7 @@ app.use('/auth', authRoutes)
 app.use('/users', userRoutes)
 app.use('/listeners', listenerRoutes)
 app.use('/artists', artistRoutes)
-app.use('/albums', albumController)
+app.use('/albums', albumRoutes)
 app.use('/songs', songController)
 
 app.listen(PORT, () => {

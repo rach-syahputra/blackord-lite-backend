@@ -1,35 +1,29 @@
-const {
-  findAlbumsByArtistUsername,
-  findAlbumById,
-  createAlbum,
-  deleteAlbumById
-} = require('./album.repository')
+const albumRepository = require('./album.repository')
 
-const getAlbumsFromArtist = async (artistUsername) => {
-  const albums = await findAlbumsByArtistUsername(artistUsername)
+const albumService = {
+  async getAlbumsFromArtist(artistUsername) {
+    const albums = await albumRepository.findAlbumsByArtistUsername(
+      artistUsername
+    )
 
-  return albums
+    return albums
+  },
+
+  async getAlbum(albumId) {
+    const album = await albumRepository.findAlbumById(albumId)
+
+    return album
+  },
+
+  async addAlbum(albumData) {
+    const album = await albumRepository.createAlbum(albumData)
+
+    return album
+  },
+
+  async deleteAlbum(albumId) {
+    await albumRepository.deleteAlbumById(albumId)
+  }
 }
 
-const getAlbum = async (albumId) => {
-  const album = await findAlbumById(albumId)
-
-  return album
-}
-
-const addAlbum = async (albumData) => {
-  const album = await createAlbum(albumData)
-
-  return album
-}
-
-const deleteAlbum = async (albumId) => {
-  await deleteAlbumById(albumId)
-}
-
-module.exports = {
-  getAlbumsFromArtist,
-  getAlbum,
-  addAlbum,
-  deleteAlbum
-}
+module.exports = albumService
