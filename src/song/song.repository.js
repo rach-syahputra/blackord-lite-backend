@@ -1,53 +1,50 @@
 const prisma = require('../db')
 const { v4: uuidv4 } = require('uuid')
 
-const findSongsByAlbumId = async (albumId) => {
-  const songs = await prisma.song.findMany({
-    where: {
-      albumId
-    },
-    orderBy: {
-      title: 'asc'
-    }
-  })
+const songRepository = {
+  async findSongsByAlbumId(albumId) {
+    const songs = await prisma.song.findMany({
+      where: {
+        albumId
+      },
+      orderBy: {
+        title: 'asc'
+      }
+    })
 
-  return songs
+    return songs
+  },
+
+  async findSongById(songId) {
+    const song = await prisma.song.findUnique({
+      where: {
+        id: songId
+      }
+    })
+
+    return song
+  },
+
+  async createSong(songData) {
+    const song = await prisma.song.create({
+      data: {
+        id: uuidv4(),
+        albumId: songData.albumId,
+        title: songData.title,
+        duration: songData.duration
+      }
+    })
+
+    return song
+  },
+
+  async deleteSongById(songId) {
+    await prisma.song.delete({
+      where: {
+        id: songId
+      }
+    })
+  }
 }
 
-const findSongById = async (songId) => {
-  const song = await prisma.song.findUnique({
-    where: {
-      id: songId
-    }
-  })
-
-  return song
-}
-
-const createSong = async (songData) => {
-  const song = await prisma.song.create({
-    data: {
-      id: uuidv4(),
-      albumId: songData.albumId,
-      title: songData.title,
-      duration: songData.duration
-    }
-  })
-
-  return song
-}
-
-const deleteSongById = async (songId) => {
-  await prisma.song.delete({
-    where: {
-      id: songId
-    }
-  })
-}
-
-module.exports = {
-  findSongsByAlbumId,
-  findSongById,
-  createSong,
-  deleteSongById
-}
+module.exports = songRepository

@@ -1,35 +1,27 @@
-const {
-  findSongsByAlbumId,
-  findSongById,
-  createSong,
-  deleteSongById
-} = require('./song.repository')
+const songRepository = require('./song.repository')
 
-const getSongsFromAlbum = async (albumId) => {
-  const songs = await findSongsByAlbumId(albumId)
+const songService = {
+  async getSongsFromAlbum(albumId) {
+    const songs = await songRepository.findSongsByAlbumId(albumId)
 
-  return songs
+    return songs
+  },
+
+  async getSong(songId) {
+    const song = await songRepository.findSongById(songId)
+
+    return song
+  },
+
+  async addSong(songData) {
+    const song = await songRepository.createSong(songData)
+
+    return song
+  },
+
+  async deleteSong(songId) {
+    await songRepository.deleteSongById(songId)
+  }
 }
 
-const getSong = async (songId) => {
-  const song = await findSongById(songId)
-
-  return song
-}
-
-const addSong = async (songData) => {
-  const song = await createSong(songData)
-
-  return song
-}
-
-const deleteSong = async (songId) => {
-  await deleteSongById(songId)
-}
-
-module.exports = {
-  getSongsFromAlbum,
-  getSong,
-  addSong,
-  deleteSong
-}
+module.exports = songService
