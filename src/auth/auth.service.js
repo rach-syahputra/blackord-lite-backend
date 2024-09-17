@@ -17,8 +17,8 @@ const authService = {
       throw Error('Wrong username or password')
     }
 
-    const accessToken = this.putAccessToken({ username, email })
-    const refreshToken = this.putRefreshToken({ username, email })
+    const accessToken = await this.putAccessToken({ username, email })
+    const refreshToken = await this.putRefreshToken({ username, email })
 
     await userRepository.updateUserByUsername(username, { refreshToken })
 
@@ -36,7 +36,7 @@ const authService = {
 
     const { username, email } = user
 
-    const newAccessToken = this.putAccessToken({ username, email })
+    const newAccessToken = await this.putAccessToken({ username, email })
 
     return newAccessToken
   },
