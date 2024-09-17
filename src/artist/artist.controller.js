@@ -51,7 +51,7 @@ const artistController = {
 
   async updateArtist(req, res) {
     try {
-      const username = req.params.username
+      const username = req.username
       const artistData = req.body
 
       const artist = await artistService.updateArtist(username, artistData)
