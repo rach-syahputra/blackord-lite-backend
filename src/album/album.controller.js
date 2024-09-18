@@ -1,4 +1,3 @@
-const { ResponseError } = require('../error/response-error')
 const albumService = require('./album.service')
 
 const albumController = {
@@ -48,14 +47,10 @@ const albumController = {
 
   async deleteAlbum(req, res, next) {
     try {
-      const id = req.params.id
-      const album = await albumService.getAlbum(id)
+      const albumId = req.params.id
 
-      const tokenUsername = req.username
-      if (album.artistUsername !== tokenUsername)
-        throw new ResponseError(401, 'You are unauthorized')
-
-      await albumService.deleteAlbum(id)
+      await albumService.checkAlbumOwner(albumId)
+      await albumService.deleteAlbum(albumId)
 
       res.status(200).json({
         message: 'Album deleted successfully'

@@ -27,6 +27,13 @@ const albumService = {
   async deleteAlbum(albumId) {
     await this.getAlbum(albumId)
     await albumRepository.deleteAlbumById(albumId)
+  },
+
+  async checkAlbumOwner(tokenUsername, albumId) {
+    const album = await this.getAlbum(albumId)
+
+    if (tokenUsername !== album.artistUsername)
+      throw new ResponseError(401, 'You are unauthorized')
   }
 }
 
