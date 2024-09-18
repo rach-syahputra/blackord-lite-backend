@@ -1,5 +1,7 @@
 const albumRepository = require('./album.repository')
 const { ResponseError } = require('../error/response-error')
+const { validate } = require('../validation/validation')
+const { AddAlbumSchema } = require('./album.validation')
 
 const albumService = {
   async getAlbumsFromArtist(artistUsername) {
@@ -18,7 +20,8 @@ const albumService = {
   },
 
   async addAlbum(albumData) {
-    console.log(albumData)
+    validate(AddAlbumSchema, albumData)
+
     const album = await albumRepository.createAlbum(albumData)
 
     return album
