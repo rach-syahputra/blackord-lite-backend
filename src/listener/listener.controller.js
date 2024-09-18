@@ -1,7 +1,8 @@
+const { ResponseError } = require('../error/response-error')
 const listenerService = require('./listener.service')
 
 const listenerController = {
-  async getListener(req, res) {
+  async getListener(req, res, next) {
     try {
       const username = req.params.username
       const listener = await listenerService.getListener(username)
@@ -11,13 +12,11 @@ const listenerController = {
         data: listener
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async addListener(req, res) {
+  async addListener(req, res, next) {
     try {
       const listenerData = req.body
 
@@ -28,20 +27,16 @@ const listenerController = {
         data: listener
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async updateListener(req, res) {
+  async updateListener(req, res, next) {
     try {
       const tokenUsername = req.username
       const listenerUsername = req.params.username
       if (tokenUsername !== listenerUsername) {
-        return res.status(401).json({
-          message: 'You are unauthorized'
-        })
+        throw new ResponseError(401, 'You are unauthorized')
       }
 
       const listenerData = req.body
@@ -55,9 +50,7 @@ const listenerController = {
         data: listener
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   }
 }

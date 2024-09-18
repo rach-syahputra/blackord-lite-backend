@@ -1,3 +1,4 @@
+const { ResponseError } = require('../error/response-error')
 const listenerRepository = require('./listener.repository')
 
 const listenerService = {
@@ -5,7 +6,7 @@ const listenerService = {
     const listener = await listenerRepository.findListenerByUsername(username)
 
     if (!listener) {
-      throw Error('Listener not found')
+      throw new ResponseError(404, 'Listener not found')
     }
 
     return listener
