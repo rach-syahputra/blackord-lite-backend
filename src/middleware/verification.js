@@ -6,7 +6,7 @@ const verification = {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) {
-      throw new ResponseError(401, 'You are unauthorized')
+      throw new ResponseError(403, 'You are unauthenticated')
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
