@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken')
 const authService = require('./auth.service')
+const { ResponseError } = require('../error/response-error')
 
 const authController = {
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const { accessToken, refreshToken } = await authService.login(req.body)
 
@@ -19,20 +20,18 @@ const authController = {
         }
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async refreshToken(req, res) {
+  async refreshToken(req, res, next) {
     try {
       const refreshToken = req.cookies.refreshToken
       const accessToken = await authService.getNewAccessToken(refreshToken)
 
-      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
-        if (err) {
-          throw Error(err.message)
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error) => {
+        if (error) {
+          throw new ResponseError(401, 'You are unauthorized')
         }
 
         res.status(200).json({
@@ -43,30 +42,25 @@ const authController = {
         })
       })
     } catch (error) {
-      res.status(403).json({
-        message: error.message || 'You are not authenticated'
-      })
+      next(error)
     }
   },
 
-  async logout(req, res) {
+  async logout(req, res, next) {
     try {
       const refreshToken = req.cookies.refreshToken
-      const user = await authService.logout(refreshToken)
-      if (!user) {
-        res.status(404).json({
-          message: 'User not found'
-        })
+      if (!refreshToken) {
+        throw new ResponseError(401, 'You are unauthorized')
       }
+
+      await authService.logout(refreshToken)
 
       res.clearCookie('refreshToken')
       res.status(200).json({
         message: 'User has been logged out'
       })
     } catch (error) {
-      res.status(403).json({
-        message: error.message
-      })
+      next(error)
     }
   }
 }

@@ -1,26 +1,27 @@
-const userRepository = require('../user/user.repository')
 const authRepository = require('./auth.repository')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const userService = require('../user/user.service')
+const { ResponseError } = require('../error/response-error')
 
 const authService = {
   async login(userData) {
-    const user = await userRepository.findUserByUsername(userData.username)
+    const user = await authRepository.findUserByUsername(userData.username)
     if (!user) {
-      throw Error('User not found')
+      throw new ResponseError(400, 'Wrong username or password')
     }
 
     const { username, password, email, roleId } = user
 
     const passwordMatch = await bcrypt.compare(userData.password, password)
     if (!passwordMatch) {
-      throw Error('Wrong username or password')
+      throw new ResponseError(400, 'Wrong username or password')
     }
 
     const accessToken = await this.putAccessToken({ username, email, roleId })
     const refreshToken = await this.putRefreshToken({ username, email, roleId })
 
-    await userRepository.updateUserByUsername(username, { refreshToken })
+    await userService.updateUser(username, { refreshToken })
 
     return {
       accessToken,
@@ -30,9 +31,6 @@ const authService = {
 
   async getNewAccessToken(refreshToken) {
     const user = await this.getUserByRefreshToken(refreshToken)
-    if (!user) {
-      throw Error('User not found')
-    }
 
     const { username, email, roleId } = user
 
@@ -47,16 +45,10 @@ const authService = {
 
   async logout(refreshToken) {
     const user = await this.getUserByRefreshToken(refreshToken)
-    if (!user) {
-      throw Error('User not found')
-    }
 
-    const updatedUser = await userRepository.updateUserByUsername(
-      user.username,
-      {
-        refreshToken: ''
-      }
-    )
+    const updatedUser = await userService.updateUser(user.username, {
+      refreshToken: ''
+    })
 
     return updatedUser
   },
@@ -64,7 +56,7 @@ const authService = {
   async getUserByRefreshToken(refreshToken) {
     const user = await authRepository.findUserByRefreshToken(refreshToken)
     if (!user) {
-      throw Error('User not found')
+      throw new ResponseError(404, 'User not found')
     }
 
     return user[0]
