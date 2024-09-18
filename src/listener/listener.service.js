@@ -1,5 +1,10 @@
-const { ResponseError } = require('../error/response-error')
 const listenerRepository = require('./listener.repository')
+const { validate } = require('../validation/validation')
+const { ResponseError } = require('../error/response-error')
+const {
+  AddListenerSchema,
+  UpdateListenerSchema
+} = require('./listener.validation')
 
 const listenerService = {
   async getListener(username) {
@@ -13,12 +18,21 @@ const listenerService = {
   },
 
   async addListener(listenerData) {
+    validate(AddListenerSchema, listenerData)
+
+    const listenerExist = await listenerRepository.findListenerByUsername(
+      listenerData.username
+    )
+    if (listenerExist) throw new ResponseError(409, 'Listener already exists')
+
     const listener = await listenerRepository.createListener(listenerData)
 
     return listener
   },
 
   async updateListener(username, listenerData) {
+    validate(UpdateListenerSchema, listenerData)
+
     const listener = await listenerRepository.updateListenerByUsername(
       username,
       listenerData
