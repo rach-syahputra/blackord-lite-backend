@@ -14,9 +14,7 @@ const userService = {
   async getUser(username) {
     const user = await userRepository.findUserByUsername(username)
 
-    if (!user) {
-      throw new ResponseError(404, 'User not found')
-    }
+    if (!user) throw new ResponseError(404, 'User not found')
 
     return user
   },
@@ -27,9 +25,7 @@ const userService = {
     const userExists = await userRepository.findUserByUsername(
       userData.username
     )
-    if (userExists) {
-      throw new ResponseError(409, 'User already exists')
-    }
+    if (userExists) throw new ResponseError(409, 'User already exists')
 
     const salt = await bcrypt.genSalt()
     const hashedPassword = await bcrypt.hash(userData.password, salt)
@@ -44,9 +40,7 @@ const userService = {
     validate(UpdateUserSchema, userData)
 
     const userExists = this.getUser(username)
-    if (!userExists) {
-      throw new ResponseError(404, 'User not found')
-    }
+    if (!userExists) throw new ResponseError(404, 'User not found')
 
     const user = await userRepository.updateUserByUsername(username, userData)
 
@@ -55,9 +49,7 @@ const userService = {
 
   async deleteUser(username) {
     const userExists = this.getUser(username)
-    if (!userExists) {
-      throw new ResponseError(404, 'User not found')
-    }
+    if (!userExists) throw new ResponseError(404, 'User not found')
 
     await userRepository.deleteUserByUsername(username)
   }
