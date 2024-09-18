@@ -1,7 +1,8 @@
+const { ResponseError } = require('../error/response-error')
 const albumService = require('./album.service')
 
 const albumController = {
-  async getAlbumsFromArtist(req, res) {
+  async getAlbumsFromArtist(req, res, next) {
     try {
       const artistUsername = req.params.username
       const albums = await albumService.getAlbumsFromArtist(artistUsername)
@@ -11,13 +12,11 @@ const albumController = {
         data: albums
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async getAlbum(req, res) {
+  async getAlbum(req, res, next) {
     try {
       const id = req.params.id
       const album = await albumService.getAlbum(id)
@@ -27,13 +26,11 @@ const albumController = {
         data: album
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async addAlbum(req, res) {
+  async addAlbum(req, res, next) {
     try {
       const albumData = req.body
       albumData.artistUsername = req.username
@@ -45,23 +42,18 @@ const albumController = {
         data: album
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async deleteAlbum(req, res) {
+  async deleteAlbum(req, res, next) {
     try {
       const id = req.params.id
       const album = await albumService.getAlbum(id)
 
-      const usernameFromToken = req.username
-      if (album.artistUsername !== usernameFromToken) {
-        return res.status(401).json({
-          message: 'You are unauthorized'
-        })
-      }
+      const tokenUsername = req.username
+      if (album.artistUsername !== tokenUsername)
+        throw new ResponseError(401, 'You are unauthorized')
 
       await albumService.deleteAlbum(id)
 
@@ -69,9 +61,7 @@ const albumController = {
         message: 'Album deleted successfully'
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   }
 }
