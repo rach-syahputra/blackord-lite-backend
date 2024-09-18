@@ -9,8 +9,8 @@ const verification = {
       throw new ResponseError(401, 'You are unauthorized')
     }
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err) {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+      if (error) {
         throw new ResponseError(403, 'Token has been expired')
       }
 
