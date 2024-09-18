@@ -1,4 +1,7 @@
 const songRepository = require('./song.repository')
+const albumService = require('../album/album.service')
+const artistService = require('../artist/artist.service')
+const { ResponseError } = require('../error/response-error')
 
 const songService = {
   async getSongsFromAlbum(albumId) {
@@ -9,6 +12,7 @@ const songService = {
 
   async getSong(songId) {
     const song = await songRepository.findSongById(songId)
+    if (!song) throw new ResponseError(404, 'Song not found')
 
     return song
   },
@@ -20,7 +24,17 @@ const songService = {
   },
 
   async deleteSong(songId) {
+    await this.getSong(songId)
     await songRepository.deleteSongById(songId)
+  },
+
+  async checkSongOwner(tokenUsername, songId) {
+    const song = await this.getSong(songId)
+    const album = await albumService.getAlbum(song.albumId)
+    const artist = await artistService.getArtist(album.artistUsername)
+
+    if (tokenUsername !== artist.username)
+      throw new ResponseError(401, 'You are unauthorized')
   }
 }
 

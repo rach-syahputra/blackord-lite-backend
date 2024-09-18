@@ -1,7 +1,8 @@
+const albumService = require('../album/album.service')
 const songService = require('./song.service')
 
 const songController = {
-  async getSongsFromAlbum(req, res) {
+  async getSongsFromAlbum(req, res, next) {
     try {
       const albumId = req.params.albumId
       const songs = await songService.getSongsFromAlbum(albumId)
@@ -11,13 +12,11 @@ const songController = {
         data: songs
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async getSong(req, res) {
+  async getSong(req, res, next) {
     try {
       const id = req.params.id
       const song = await songService.getSong(id)
@@ -27,16 +26,15 @@ const songController = {
         data: song
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async addSong(req, res) {
+  async addSong(req, res, next) {
     try {
       const songData = req.body
 
+      await albumService.checkAlbumOwner(req.username, songData.albumId)
       const song = await songService.addSong(songData)
 
       res.status(201).json({
@@ -44,25 +42,22 @@ const songController = {
         data: song
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async deleteSong(req, res) {
+  async deleteSong(req, res, next) {
     try {
-      const id = req.params.id
+      const songId = req.params.id
 
-      await songService.deleteSong(id)
+      await songService.checkSongOwner(req.username, songId)
+      await songService.deleteSong(songId)
 
       res.status(200).json({
         message: 'Song deleted successfully'
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   }
 }
