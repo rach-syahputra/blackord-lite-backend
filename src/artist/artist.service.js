@@ -10,9 +10,7 @@ const artistService = {
   async getArtist(username) {
     const artist = await artistRepository.findArtistByUsername(username)
 
-    if (!artist) {
-      throw Error('Artist not found')
-    }
+    if (!artist) throw Error('Artist not found')
 
     return artist
   },

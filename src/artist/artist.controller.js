@@ -1,7 +1,8 @@
+const { ResponseError } = require('../error/response-error')
 const artistService = require('./artist.service')
 
 const artistController = {
-  async getAllArtists(req, res) {
+  async getAllArtists(req, res, next) {
     try {
       const artists = await artistService.getAllArtists()
 
@@ -10,13 +11,11 @@ const artistController = {
         data: artists
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async getArtist(req, res) {
+  async getArtist(req, res, next) {
     try {
       const username = req.params.username
       const artist = await artistService.getArtist(username)
@@ -26,13 +25,11 @@ const artistController = {
         data: artist
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async addArtist(req, res) {
+  async addArtist(req, res, next) {
     try {
       const artistData = req.body
 
@@ -43,20 +40,16 @@ const artistController = {
         data: artist
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async updateArtist(req, res) {
+  async updateArtist(req, res, next) {
     try {
       const tokenUsername = req.username
       const artistUsername = req.params.username
       if (tokenUsername !== artistUsername) {
-        return res.status(401).json({
-          message: 'You are unauthorized'
-        })
+        throw new ResponseError(401, 'You are unauthorized')
       }
 
       const artistData = req.body
@@ -70,9 +63,7 @@ const artistController = {
         data: artist
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   }
 }
