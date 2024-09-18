@@ -2,10 +2,14 @@ const authRepository = require('./auth.repository')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const userService = require('../user/user.service')
+const { validate } = require('../validation/validation')
 const { ResponseError } = require('../error/response-error')
+const { LoginSchema } = require('./auth.validation')
 
 const authService = {
   async login(userData) {
+    validate(LoginSchema, userData)
+
     const user = await authRepository.findUserByUsername(userData.username)
     if (!user) {
       throw new ResponseError(400, 'Wrong username or password')

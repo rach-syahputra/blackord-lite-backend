@@ -33,7 +33,6 @@ const userService = {
 
     const salt = await bcrypt.genSalt()
     const hashedPassword = await bcrypt.hash(userData.password, salt)
-
     userData.password = hashedPassword
 
     const user = await userRepository.createUser(userData)
