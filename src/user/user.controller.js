@@ -1,7 +1,7 @@
 const userService = require('./user.service')
 
 const userController = {
-  async getAllUsers(req, res) {
+  async getAllUsers(req, res, next) {
     try {
       const users = await userService.getAllUsers()
 
@@ -10,13 +10,11 @@ const userController = {
         data: users
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async getUser(req, res) {
+  async getUser(req, res, next) {
     try {
       const username = req.params.username
       const user = await userService.getUser(username)
@@ -26,13 +24,11 @@ const userController = {
         data: user
       })
     } catch (error) {
-      res.status(404).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async addUser(req, res) {
+  async addUser(req, res, next) {
     try {
       const userData = req.body
 
@@ -43,13 +39,11 @@ const userController = {
         data: user
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async updateUser(req, res) {
+  async updateUser(req, res, next) {
     try {
       const username = req.params.username
       const userData = req.body
@@ -61,13 +55,11 @@ const userController = {
         data: user
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   },
 
-  async deleteUser(req, res) {
+  async deleteUser(req, res, next) {
     try {
       const username = req.params.username
 
@@ -77,9 +69,7 @@ const userController = {
         message: 'User deleted successfully'
       })
     } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+      next(error)
     }
   }
 }

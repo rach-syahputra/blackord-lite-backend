@@ -1,5 +1,8 @@
-const userRepository = require('./user.repository')
 const bcrypt = require('bcrypt')
+const userRepository = require('./user.repository')
+const { AddUserSchema, UpdateUserSchema } = require('./user.validation')
+const { validate } = require('../validation/validation')
+const { ResponseError } = require('../error/response-error')
 
 const userService = {
   async getAllUsers() {
@@ -12,16 +15,22 @@ const userService = {
     const user = await userRepository.findUserByUsername(username)
 
     if (!user) {
-      throw Error('User not found')
+      throw new ResponseError(404, 'User not found')
     }
 
-    // eslint-disable-next-line no-unused-vars
-    const { password, ...other } = user
-
-    return other
+    return user
   },
 
   async addUser(userData) {
+    validate(AddUserSchema, userData)
+
+    const userExists = await userRepository.findUserByUsername(
+      userData.username
+    )
+    if (userExists) {
+      throw new ResponseError(409, 'User already exists')
+    }
+
     const salt = await bcrypt.genSalt()
     const hashedPassword = await bcrypt.hash(userData.password, salt)
 
@@ -33,12 +42,24 @@ const userService = {
   },
 
   async updateUser(username, userData) {
+    validate(UpdateUserSchema, userData)
+
+    const userExists = this.getUser(username)
+    if (!userExists) {
+      throw new ResponseError(404, 'User not found')
+    }
+
     const user = await userRepository.updateUserByUsername(username, userData)
 
     return user
   },
 
   async deleteUser(username) {
+    const userExists = this.getUser(username)
+    if (!userExists) {
+      throw new ResponseError(404, 'User not found')
+    }
+
     await userRepository.deleteUserByUsername(username)
   }
 }

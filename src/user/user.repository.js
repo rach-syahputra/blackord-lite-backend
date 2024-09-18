@@ -33,22 +33,6 @@ const userRepository = {
     return user
   },
 
-  async findUserByRefreshToken(refreshToken) {
-    const user = await prisma.user.findMany({
-      where: {
-        refreshToken
-      },
-      select: {
-        username: true,
-        email: true,
-        roleId: true,
-        createdAt: true
-      }
-    })
-
-    return user
-  },
-
   async createUser(userData) {
     const user = await prisma.user.create({
       data: {
