@@ -39,8 +39,7 @@ const userService = {
   async updateUser(username, userData) {
     validate(UpdateUserSchema, userData)
 
-    const userExists = this.getUser(username)
-    if (!userExists) throw new ResponseError(404, 'User not found')
+    await this.getUser(username)
 
     const user = await userRepository.updateUserByUsername(username, userData)
 
