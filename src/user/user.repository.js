@@ -21,6 +21,12 @@ const userRepository = {
     const user = await prisma.user.findUnique({
       where: {
         username
+      },
+      select: {
+        username: true,
+        email: true,
+        roleId: true,
+        createdAt: true
       }
     })
 
@@ -31,6 +37,12 @@ const userRepository = {
     const user = await prisma.user.findMany({
       where: {
         refreshToken
+      },
+      select: {
+        username: true,
+        email: true,
+        roleId: true,
+        createdAt: true
       }
     })
 
