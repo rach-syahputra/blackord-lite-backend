@@ -2,6 +2,8 @@ const songRepository = require('./song.repository')
 const albumService = require('../album/album.service')
 const artistService = require('../artist/artist.service')
 const { ResponseError } = require('../error/response-error')
+const { validate } = require('../validation/validation')
+const { AddSongSchema } = require('./song.validation')
 
 const songService = {
   async getSongsFromAlbum(albumId) {
@@ -18,6 +20,8 @@ const songService = {
   },
 
   async addSong(songData) {
+    validate(AddSongSchema, songData)
+
     const song = await songRepository.createSong(songData)
 
     return song
