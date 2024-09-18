@@ -30,8 +30,13 @@ const authService = {
   },
 
   async getNewAccessToken(refreshToken) {
-    const user = await this.getUserByRefreshToken(refreshToken)
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error) => {
+      if (error) {
+        throw new ResponseError(401, 'You are unauthorized')
+      }
+    })
 
+    const user = await this.getUserByRefreshToken(refreshToken)
     const { username, email, roleId } = user
 
     const newAccessToken = await this.putAccessToken({

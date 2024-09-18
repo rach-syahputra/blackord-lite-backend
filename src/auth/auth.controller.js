@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken')
 const authService = require('./auth.service')
 const { ResponseError } = require('../error/response-error')
 
@@ -29,17 +28,11 @@ const authController = {
       const refreshToken = req.cookies.refreshToken
       const accessToken = await authService.getNewAccessToken(refreshToken)
 
-      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error) => {
-        if (error) {
-          throw new ResponseError(401, 'You are unauthorized')
+      res.status(200).json({
+        message: 'Refresh token successfull',
+        data: {
+          accessToken
         }
-
-        res.status(200).json({
-          message: 'Refresh token successfull',
-          data: {
-            accessToken
-          }
-        })
       })
     } catch (error) {
       next(error)
