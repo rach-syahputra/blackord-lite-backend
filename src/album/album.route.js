@@ -4,12 +4,8 @@ const { verifyToken } = require('../middleware/verification')
 
 const router = express.Router()
 
-router.get(
-  '/artists/:username',
-  verifyToken,
-  albumController.getAlbumsFromArtist
-)
-router.get('/:id', verifyToken, albumController.getAlbum)
+router.get('/artists/:username', albumController.getAlbumsFromArtist)
+router.get('/:id', albumController.getAlbum)
 router.post('/', verifyToken, albumController.addAlbum)
 router.delete('/:id', verifyToken, albumController.deleteAlbum)
 
