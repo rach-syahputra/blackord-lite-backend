@@ -59,6 +59,14 @@ CREATE TABLE `Song` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `listener_artist` (
+    `listenerUsername` VARCHAR(191) NOT NULL,
+    `artistUsername` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`listenerUsername`, `artistUsername`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -73,3 +81,9 @@ ALTER TABLE `Album` ADD CONSTRAINT `Album_artistUsername_fkey` FOREIGN KEY (`art
 
 -- AddForeignKey
 ALTER TABLE `Song` ADD CONSTRAINT `Song_albumId_fkey` FOREIGN KEY (`albumId`) REFERENCES `Album`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `listener_artist` ADD CONSTRAINT `listener_artist_listenerUsername_fkey` FOREIGN KEY (`listenerUsername`) REFERENCES `Listener`(`username`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `listener_artist` ADD CONSTRAINT `listener_artist_artistUsername_fkey` FOREIGN KEY (`artistUsername`) REFERENCES `Artist`(`username`) ON DELETE RESTRICT ON UPDATE CASCADE;
