@@ -1,6 +1,8 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
+const { ResponseError } = require('./error/response-error')
+const { ZodError } = require('zod')
 
 const authRoutes = require('./auth/auth.route')
 const userRoutes = require('./user/user.route')
@@ -8,8 +10,6 @@ const listenerRoutes = require('./listener/listener.route')
 const artistRoutes = require('./artist/artist.route')
 const albumRoutes = require('./album/album.route')
 const songRoutes = require('./song/song.route')
-const { ResponseError } = require('./error/response-error')
-const { ZodError } = require('zod')
 
 const app = express()
 app.use(express.json())
