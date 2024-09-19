@@ -32,18 +32,20 @@ model Role {
 }
 
 model Listener {
-  user     User   @relation(fields: [username], references: [username], onDelete: Cascade)
-  username String @id
-  image    String
+  user                User                  @relation(fields: [username], references: [username], onDelete: Cascade)
+  username            String                @id
+  image               String
+  ListenerLikesArtist ListenerLikesArtist[]
 }
 
 model Artist {
-  user       User    @relation(fields: [username], references: [username], onDelete: Cascade)
-  username   String  @id
-  artistName String
-  image      String
-  bio        String
-  Album      Album[]
+  user                User                  @relation(fields: [username], references: [username], onDelete: Cascade)
+  username            String                @id
+  artistName          String
+  image               String
+  bio                 String
+  Album               Album[]
+  ListenerLikesArtist ListenerLikesArtist[]
 }
 
 model Album {
@@ -63,4 +65,13 @@ model Song {
   albumId  String
   title    String
   duration Int
+}
+
+model ListenerLikesArtist {
+  listener         Listener @relation(fields: [listenerUsername], references: [username])
+  listenerUsername String
+  artist           Artist   @relation(fields: [artistUsername], references: [username])
+  artistUsername   String
+
+  @@id([listenerUsername, artistUsername])
 }
