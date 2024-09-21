@@ -36,6 +36,8 @@ const listenerService = {
   },
 
   async updateListener(username, listenerData) {
+    await this.getListener(username)
+
     listenerData.image = await this.uploadListenerImage(
       listenerData.imageFile.path
     )
@@ -60,7 +62,7 @@ const listenerService = {
     )
     if (!listenerImage) throw new ResponseError(422, 'Image not uploaded')
 
-    return listenerImage.display_name
+    return listenerImage.secure_url
   },
 
   async deleteListenerImage(image) {
