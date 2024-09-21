@@ -31,7 +31,12 @@ const artistController = {
 
   async addArtist(req, res, next) {
     try {
+      if (!req.file) {
+        throw new ResponseError(400, 'Image file is required')
+      }
+
       const artistData = req.body
+      artistData.imageFile = req.file
 
       const artist = await artistService.addArtist(artistData)
 
@@ -52,7 +57,13 @@ const artistController = {
         throw new ResponseError(401, 'You are unauthorized')
       }
 
+      if (!req.file) {
+        throw new ResponseError(400, 'Image file is required')
+      }
+
       const artistData = req.body
+      artistData.imageFile = req.file
+
       const artist = await artistService.updateArtist(
         artistUsername,
         artistData
