@@ -6,13 +6,18 @@ const { uploadListenerImage } = require('../../utils/multer')
 
 const router = express.Router()
 
-router.get('/:username', verifyToken, listenerController.getListener)
+router.get('/:username', listenerController.getListener)
 router.post(
   '/',
   uploadListenerImage.single('image'),
   listenerController.addListener
 )
-router.put('/:username', verifyToken, listenerController.updateListener)
+router.put(
+  '/:username',
+  verifyToken,
+  uploadListenerImage.single('image'),
+  listenerController.updateListener
+)
 
 router.get(
   '/:username/favorite-artists',

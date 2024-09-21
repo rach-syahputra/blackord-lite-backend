@@ -1,11 +1,11 @@
 const listenerRepository = require('./listener.repository')
+const listenerImageRepository = require('./listener.image.repository')
 const { validate } = require('../../utils/validation/validation')
 const { ResponseError } = require('../../utils/error/response-error')
 const {
   AddListenerSchema,
   UpdateListenerSchema
 } = require('./listener.validation')
-const cloudinary = require('../../utils/cloudinary')
 
 const listenerService = {
   async getListener(username) {
@@ -24,13 +24,9 @@ const listenerService = {
     )
     if (listenerExist) throw new ResponseError(409, 'Listener already exists')
 
-    const listenerImage = await cloudinary.uploader.upload(
-      listenerData.imageFile.path,
-      {
-        folder: 'listener-images'
-      }
+    listenerData.image = await this.uploadListenerImage(
+      listenerData.imageFile.path
     )
-    listenerData.image = listenerImage.secure_url
     delete listenerData.imageFile
 
     validate(AddListenerSchema, listenerData)
@@ -40,14 +36,42 @@ const listenerService = {
   },
 
   async updateListener(username, listenerData) {
-    validate(UpdateListenerSchema, listenerData)
+    listenerData.image = await this.uploadListenerImage(
+      listenerData.imageFile.path
+    )
+    delete listenerData.imageFile
 
+    const previousListenerImage =
+      await listenerRepository.findListenerByUsername(username)
+    await this.deleteListenerImage(previousListenerImage.image)
+
+    validate(UpdateListenerSchema, listenerData)
     const listener = await listenerRepository.updateListenerByUsername(
       username,
       listenerData
     )
 
     return listener
+  },
+
+  async uploadListenerImage(image) {
+    const listenerImage = await listenerImageRepository.uploadListenerImage(
+      image
+    )
+    if (!listenerImage) throw new ResponseError(422, 'Image not uploaded')
+
+    return listenerImage.display_name
+  },
+
+  async deleteListenerImage(image) {
+    const listenerImageFolder = process.env.CLOUDINARY_LISTENER_IMAGE_FOLDER
+
+    const previousListenerImageDeleted =
+      await listenerImageRepository.deleteListenerImage(
+        `${listenerImageFolder}/${image}`
+      )
+    if (!previousListenerImageDeleted)
+      throw new ResponseError(422, 'Image not deleted')
   }
 }
 

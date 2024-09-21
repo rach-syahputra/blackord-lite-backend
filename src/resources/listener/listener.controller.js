@@ -44,7 +44,13 @@ const listenerController = {
         throw new ResponseError(401, 'You are unauthorized')
       }
 
+      if (!req.file) {
+        throw new ResponseError(400, 'Image file is required')
+      }
+
       const listenerData = req.body
+      listenerData.imageFile = req.file
+
       const listener = await listenerService.updateListener(
         listenerUsername,
         listenerData
