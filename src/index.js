@@ -1,6 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
 const { ResponseError } = require('./utils/error/response-error')
 const { ZodError } = require('zod')
 
@@ -14,6 +15,7 @@ const songRoutes = require('./resources/song/song.route')
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
+app.use(bodyParser.json())
 
 dotenv.config()
 const PORT = process.env.PORT
