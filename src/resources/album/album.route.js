@@ -1,6 +1,6 @@
 const express = require('express')
 const albumController = require('./album.controller')
-const { verifyToken } = require('../middleware/verification')
+const { verifyToken } = require('../../middleware/verification')
 
 const router = express.Router()
 

@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt')
 const userRepository = require('./user.repository')
 const { AddUserSchema, UpdateUserSchema } = require('./user.validation')
-const { validate } = require('../validation/validation')
-const { ResponseError } = require('../error/response-error')
+const { validate } = require('../../validation/validation')
+const { ResponseError } = require('../../error/response-error')
 
 const userService = {
   async getAllUsers() {

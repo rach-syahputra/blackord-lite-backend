@@ -1,6 +1,6 @@
 const listenerRepository = require('./listener.repository')
-const { validate } = require('../validation/validation')
-const { ResponseError } = require('../error/response-error')
+const { validate } = require('../../validation/validation')
+const { ResponseError } = require('../../error/response-error')
 const {
   AddListenerSchema,
   UpdateListenerSchema

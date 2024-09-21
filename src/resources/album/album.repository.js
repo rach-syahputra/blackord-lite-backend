@@ -1,4 +1,4 @@
-const prisma = require('../db')
+const prisma = require('../../db')
 
 const albumRepository = {
   async findAlbumCount(artistUsername) {

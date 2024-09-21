@@ -1,6 +1,6 @@
 const express = require('express')
 const artistController = require('./artist.controller')
-const { verifyToken } = require('../middleware/verification')
+const { verifyToken } = require('../../middleware/verification')
 const listenerArtistController = require('../relationship/listener-artist/listener-artist.controller')
 
 const router = express.Router()

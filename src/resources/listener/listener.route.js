@@ -1,5 +1,5 @@
 const express = require('express')
-const { verifyToken } = require('../middleware/verification')
+const { verifyToken } = require('../../middleware/verification')
 const listenerController = require('./listener.controller')
 const listenerArtistController = require('../relationship/listener-artist/listener-artist.controller')
 
