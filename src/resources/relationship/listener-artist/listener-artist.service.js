@@ -1,4 +1,4 @@
-const { ResponseError } = require('../../../error/response-error')
+const { ResponseError } = require('../../../utils/error/response-error')
 const listenerArtistRepository = require('./listener-artist.repository')
 
 const listenerArtistService = {

@@ -1,5 +1,5 @@
 const { ZodError } = require('zod')
-const ResponseError = require('../error/response-error')
+const ResponseError = require('../utils/error/response-error')
 
 // temporarily this error middleware handler isn't called anywhere
 // instead the error middleware is coded directly within index.js

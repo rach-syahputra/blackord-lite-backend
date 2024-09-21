@@ -1,8 +1,8 @@
 const songRepository = require('./song.repository')
 const albumService = require('../album/album.service')
 const artistService = require('../artist/artist.service')
-const { ResponseError } = require('../../error/response-error')
-const { validate } = require('../../validation/validation')
+const { ResponseError } = require('../../utils/error/response-error')
+const { validate } = require('../../utils/validation/validation')
 const { AddSongSchema } = require('./song.validation')
 
 const songService = {

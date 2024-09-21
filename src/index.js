@@ -1,7 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
-const { ResponseError } = require('./error/response-error')
+const { ResponseError } = require('./utils/error/response-error')
 const { ZodError } = require('zod')
 
 const authRoutes = require('./resources/auth/auth.route')

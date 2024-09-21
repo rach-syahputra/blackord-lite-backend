@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { ResponseError } = require('../error/response-error')
+const { ResponseError } = require('../utils/error/response-error')
 
 const verification = {
   verifyToken(req, res, next) {

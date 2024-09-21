@@ -1,5 +1,5 @@
 const authService = require('./auth.service')
-const { ResponseError } = require('../../error/response-error')
+const { ResponseError } = require('../../utils/error/response-error')
 
 const authController = {
   async login(req, res, next) {

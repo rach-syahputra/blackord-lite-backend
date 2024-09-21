@@ -1,4 +1,4 @@
-const prisma = require('../../db')
+const prisma = require('../../utils/db')
 const { v4: uuidv4 } = require('uuid')
 
 const songRepository = {
