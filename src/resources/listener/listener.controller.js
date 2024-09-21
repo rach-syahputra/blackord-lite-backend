@@ -18,7 +18,12 @@ const listenerController = {
 
   async addListener(req, res, next) {
     try {
+      if (!req.file) {
+        throw new ResponseError(400, 'Image file is required')
+      }
+
       const listenerData = req.body
+      listenerData.imageFile = req.file
 
       const listener = await listenerService.addListener(listenerData)
 

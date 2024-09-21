@@ -5,6 +5,7 @@ const {
   AddListenerSchema,
   UpdateListenerSchema
 } = require('./listener.validation')
+const cloudinary = require('../../utils/cloudinary')
 
 const listenerService = {
   async getListener(username) {
@@ -18,13 +19,21 @@ const listenerService = {
   },
 
   async addListener(listenerData) {
-    validate(AddListenerSchema, listenerData)
-
     const listenerExist = await listenerRepository.findListenerByUsername(
       listenerData.username
     )
     if (listenerExist) throw new ResponseError(409, 'Listener already exists')
 
+    const listenerImage = await cloudinary.uploader.upload(
+      listenerData.imageFile.path,
+      {
+        folder: 'listener-images'
+      }
+    )
+    listenerData.image = listenerImage.secure_url
+    delete listenerData.imageFile
+
+    validate(AddListenerSchema, listenerData)
     const listener = await listenerRepository.createListener(listenerData)
 
     return listener
