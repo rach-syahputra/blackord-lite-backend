@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node .",
     "dev": "nodemon ."
   },
@@ -14,7 +14,9 @@
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "eslint": "^9.10.0",
-    "globals": "^15.9.0"
+    "globals": "^15.9.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
