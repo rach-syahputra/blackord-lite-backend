@@ -1,6 +1,7 @@
 const authRepository = require('./auth.repository')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const { putAccessToken, putRefreshToken } = require('../../utils/jwt')
 const userService = require('../user/user.service')
 const { validate } = require('../../utils/validation/validation')
 const { ResponseError } = require('../../utils/error/response-error')
@@ -22,8 +23,8 @@ const authService = {
       throw new ResponseError(400, 'Wrong username or password')
     }
 
-    const accessToken = await this.putAccessToken({ username, email, roleId })
-    const refreshToken = await this.putRefreshToken({ username, email, roleId })
+    const accessToken = await putAccessToken({ username, email, roleId })
+    const refreshToken = await putRefreshToken({ username, email, roleId })
 
     await userService.updateUser(username, { refreshToken })
 
@@ -43,7 +44,7 @@ const authService = {
     const user = await this.getUserByRefreshToken(refreshToken)
     const { username, email, roleId } = user
 
-    const newAccessToken = await this.putAccessToken({
+    const newAccessToken = await putAccessToken({
       username,
       email,
       roleId
@@ -69,18 +70,6 @@ const authService = {
     }
 
     return user[0]
-  },
-
-  async putAccessToken(userData) {
-    return jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '1h'
-    })
-  },
-
-  async putRefreshToken(userData) {
-    return jwt.sign(userData, process.env.REFRESH_TOKEN_SECRET, {
-      expiresIn: '1d'
-    })
   }
 }
 
