@@ -1,3 +1,4 @@
+const { ResponseError } = require('../../utils/error/response-error')
 const userService = require('./user.service')
 
 const userController = {
@@ -45,7 +46,12 @@ const userController = {
 
   async updateUser(req, res, next) {
     try {
+      const tokenUsername = req.username
       const username = req.params.username
+      if (tokenUsername !== username) {
+        throw new ResponseError(401, 'You are unauthorized')
+      }
+
       const userData = req.body
 
       const user = await userService.updateUser(username, userData)
@@ -61,7 +67,11 @@ const userController = {
 
   async deleteUser(req, res, next) {
     try {
+      const tokenUsername = req.username
       const username = req.params.username
+      if (tokenUsername !== username) {
+        throw new ResponseError(401, 'You are unauthorized')
+      }
 
       await userService.deleteUser(username)
 
