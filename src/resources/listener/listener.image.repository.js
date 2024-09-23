@@ -9,8 +9,8 @@ const listenerImageRepository = {
     return listenerImage
   },
 
-  async deleteListenerImage(image) {
-    const listenerImage = await cloudinary.uploader.destroy(image)
+  async deleteListenerImage(publicId) {
+    const listenerImage = await cloudinary.uploader.destroy(publicId)
 
     return listenerImage
   }

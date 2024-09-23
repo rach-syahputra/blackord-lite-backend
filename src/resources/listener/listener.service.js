@@ -6,6 +6,9 @@ const {
   AddListenerSchema,
   UpdateListenerSchema
 } = require('./listener.validation')
+const {
+  getCloudinaryPublicId
+} = require('../../utils/cloudinary/cloudinary-public-id')
 
 const listenerService = {
   async getListener(username) {
@@ -66,12 +69,10 @@ const listenerService = {
   },
 
   async deleteListenerImage(image) {
-    const listenerImageFolder = process.env.CLOUDINARY_LISTENER_IMAGE_FOLDER
+    const publicId = getCloudinaryPublicId(image)
 
     const previousListenerImageDeleted =
-      await listenerImageRepository.deleteListenerImage(
-        `${listenerImageFolder}/${image}`
-      )
+      await listenerImageRepository.deleteListenerImage(publicId)
     if (!previousListenerImageDeleted)
       throw new ResponseError(422, 'Image not deleted')
   }
