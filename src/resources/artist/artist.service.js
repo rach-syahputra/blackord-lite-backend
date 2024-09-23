@@ -3,6 +3,9 @@ const { validate } = require('../../utils/validation/validation')
 const artistRepository = require('./artist.repository')
 const artistImageRepository = require('./artist.image.repository')
 const { AddArtistSchema, UpdateArtistSchema } = require('./artist.validation')
+const {
+  getCloudinaryPublicId
+} = require('../../utils/cloudinary/cloudinary-public-id')
 
 const artistService = {
   async getAllArtists() {
@@ -20,6 +23,12 @@ const artistService = {
   },
 
   async addArtist(artistData) {
+    const artistUsername = await artistRepository.findUserByUsername(
+      artistData.username
+    )
+    if (!artistUsername)
+      throw new ResponseError(400, 'Username is not registered')
+
     const artistExists = await artistRepository.findArtistByUsername(
       artistData.username
     )
@@ -62,12 +71,10 @@ const artistService = {
   },
 
   async deleteArtistImage(image) {
-    const artistImageFolder = process.env.CLOUDINARY_ARTIST_IMAGE_FOLDER
+    const publicId = getCloudinaryPublicId(image)
 
     const previousArtistImageDeleted =
-      await artistImageRepository.deleteArtistImage(
-        `${artistImageFolder}/${image}`
-      )
+      await artistImageRepository.deleteArtistImage(publicId)
     if (!previousArtistImageDeleted)
       throw new ResponseError(422, 'Image not deleted')
   }

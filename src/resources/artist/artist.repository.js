@@ -1,6 +1,16 @@
 const prisma = require('../../utils/db')
 
 const artistRepository = {
+  async findUserByUsername(username) {
+    const user = await prisma.user.findUnique({
+      where: {
+        username
+      }
+    })
+
+    return user
+  },
+
   async findAllArtists() {
     const artists = await prisma.artist.findMany()
 

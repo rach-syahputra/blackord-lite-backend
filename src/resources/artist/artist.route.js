@@ -6,8 +6,8 @@ const { uploadArtistImage } = require('../../utils/multer')
 
 const router = express.Router()
 
-router.get('/', verifyToken, artistController.getAllArtists)
-router.get('/:username', verifyToken, artistController.getArtist)
+router.get('/', artistController.getAllArtists)
+router.get('/:username', artistController.getArtist)
 router.post('/', uploadArtistImage.single('image'), artistController.addArtist)
 router.put(
   '/:username',
