@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 
 const username = 'user-test'
 const password = '12345678'
-const email = 'user_test@example.com'
+const email = 'user.test@example.com'
 const updatedEmail = 'user_test_updated@example.com'
 const listenerRoleId = 1
 
@@ -26,7 +26,7 @@ const userTest = {
       }
     })
 
-    if (!user) throw new Error('User not found')
+    if (!user) return
 
     return user
   },
@@ -43,6 +43,9 @@ const userTest = {
   },
 
   async deleteUser() {
+    const user = await this.getUserByUsername(username)
+    if (!user) return
+
     await prisma.user.delete({
       where: {
         username

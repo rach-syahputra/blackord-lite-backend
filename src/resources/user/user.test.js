@@ -1,6 +1,6 @@
 const supertest = require('supertest')
 const userTest = require('./user.test.util')
-const { app } = require('../../index')
+const app = require('../../index')
 const { putAccessToken } = require('../../utils/jwt')
 
 const getToken = async () => {
@@ -14,6 +14,10 @@ const getToken = async () => {
 }
 
 describe('ADD USER', () => {
+  afterEach(async () => {
+    await userTest.deleteUser()
+  })
+
   it('should not add new user if request is invalid', async () => {
     const response = await supertest(app).post('/users').send({
       username: '',
@@ -29,7 +33,7 @@ describe('ADD USER', () => {
   it('should add new user', async () => {
     const response = await supertest(app).post('/users').send({
       username: 'user-test',
-      password: 'user-test-update',
+      password: '12345678',
       email: 'user_test@example.com',
       roleId: 1
     })
@@ -38,8 +42,6 @@ describe('ADD USER', () => {
     expect(response.body.data.username).toBe('user-test')
     expect(response.body.data.email).toBe('user_test@example.com')
     expect(response.body.data.roleId).toBe(1)
-
-    await userTest.deleteUser()
   })
 })
 
@@ -53,12 +55,11 @@ describe('GET USER', () => {
   })
 
   it('should be able to get user', async () => {
-    const token = await getToken()
     const response = await supertest(app).get('/users/user-test')
 
     expect(response.status).toBe(200)
     expect(response.body.data.username).toBe('user-test')
-    expect(response.body.data.email).toBe('user_test@example.com')
+    expect(response.body.data.email).toBe('user.test@example.com')
     expect(response.body.data.roleId).toBe(1)
   })
 })
@@ -92,5 +93,18 @@ describe('UPDATE USER', () => {
 
     expect(response.status).toBe(400)
     expect(response.body.error).toBeDefined()
+  })
+
+  it('should update user', async () => {
+    const token = await getToken()
+    const response = await supertest(app)
+      .put('/users/user-test')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        email: 'user.email.updated@example.com'
+      })
+
+    expect(response.status).toBe(200)
+    expect(response.body.data.email).toBe('user.email.updated@example.com')
   })
 })
