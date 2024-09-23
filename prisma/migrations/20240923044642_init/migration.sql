@@ -83,7 +83,7 @@ ALTER TABLE `Album` ADD CONSTRAINT `Album_artistUsername_fkey` FOREIGN KEY (`art
 ALTER TABLE `Song` ADD CONSTRAINT `Song_albumId_fkey` FOREIGN KEY (`albumId`) REFERENCES `Album`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `listener_artist` ADD CONSTRAINT `listener_artist_listenerUsername_fkey` FOREIGN KEY (`listenerUsername`) REFERENCES `Listener`(`username`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `listener_artist` ADD CONSTRAINT `listener_artist_listenerUsername_fkey` FOREIGN KEY (`listenerUsername`) REFERENCES `Listener`(`username`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `listener_artist` ADD CONSTRAINT `listener_artist_artistUsername_fkey` FOREIGN KEY (`artistUsername`) REFERENCES `Artist`(`username`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `listener_artist` ADD CONSTRAINT `listener_artist_artistUsername_fkey` FOREIGN KEY (`artistUsername`) REFERENCES `Artist`(`username`) ON DELETE CASCADE ON UPDATE CASCADE;

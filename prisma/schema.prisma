@@ -68,9 +68,9 @@ model Song {
 }
 
 model ListenerArtist {
-  listener         Listener @relation(fields: [listenerUsername], references: [username])
+  listener         Listener @relation(fields: [listenerUsername], references: [username], onDelete: Cascade)
   listenerUsername String
-  artist           Artist   @relation(fields: [artistUsername], references: [username])
+  artist           Artist   @relation(fields: [artistUsername], references: [username], onDelete: Cascade)
   artistUsername   String
 
   @@id([listenerUsername, artistUsername])
