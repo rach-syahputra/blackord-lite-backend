@@ -1,5 +1,4 @@
 const express = require('express')
-const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const { ResponseError } = require('./utils/error/response-error')
@@ -16,9 +15,6 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(bodyParser.json())
-
-dotenv.config()
-const PORT = process.env.PORT
 
 app.use('/auth', authRoutes)
 app.use('/users', userRoutes)
@@ -51,8 +47,4 @@ app.use((error, req, res, next) => {
   }
 })
 
-app.listen(PORT, () => {
-  console.log('Server is running on port:', PORT)
-})
-
-module.exports = { app }
+module.exports = app
