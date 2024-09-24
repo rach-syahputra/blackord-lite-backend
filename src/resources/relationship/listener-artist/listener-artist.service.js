@@ -12,9 +12,11 @@ const listenerArtistService = {
   },
 
   async getAllFollowersFromArtist(artistUsername) {
-    const followers = await listenerArtistRepository.findAllFollowersFromArtist(
+    const response = await listenerArtistRepository.findAllFollowersFromArtist(
       artistUsername
     )
+
+    const followers = response.map((res) => res.listenerUsername)
 
     return followers
   },
