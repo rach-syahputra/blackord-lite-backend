@@ -3,10 +3,12 @@ const listenerArtistRepository = require('./listener-artist.repository')
 
 const listenerArtistService = {
   async getAllFavoriteArtistsFromListener(listenerUsername) {
-    const favoriteArtists =
+    const response =
       await listenerArtistRepository.findAllFavoriteArtistsFromListener(
         listenerUsername
       )
+
+    const favoriteArtists = response.map((res) => res.artistUsername)
 
     return favoriteArtists
   },
