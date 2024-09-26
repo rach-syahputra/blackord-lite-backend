@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const { putAccessToken, putRefreshToken } = require('../../utils/jwt')
 const userService = require('../user/user.service')
+const listenerService = require('../listener/listener.service')
+const artistService = require('../artist/artist.service')
 const { validate } = require('../../utils/validation/validation')
 const { ResponseError } = require('../../utils/error/response-error')
 const { LoginSchema } = require('./auth.validation')
@@ -70,6 +72,18 @@ const authService = {
     }
 
     return user[0]
+  },
+
+  async getCurrentUser(userData) {
+    if (userData.roleId === 1) {
+      const listener = await listenerService.getListener(userData.username)
+
+      return listener
+    } else if (userData.roleId === 2) {
+      const artist = await artistService.getArtist(userData.username)
+
+      return artist
+    }
   }
 }
 

@@ -55,6 +55,24 @@ const authController = {
     } catch (error) {
       next(error)
     }
+  },
+
+  async getCurrentUser(req, res, next) {
+    try {
+      const userData = {
+        username: req.username,
+        roleId: req.roleId
+      }
+
+      const user = await authService.getCurrentUser(userData)
+
+      res.status(200).json({
+        message: 'Current user retrieved successfully',
+        data: user
+      })
+    } catch (error) {
+      next(error)
+    }
   }
 }
 
