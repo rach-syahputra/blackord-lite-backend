@@ -15,6 +15,8 @@ const verification = {
       }
 
       req.username = decoded.username
+      req.email = decoded.email
+      req.roleId = decoded.roleId
       next()
     })
   }
