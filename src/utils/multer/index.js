@@ -2,7 +2,8 @@ const multer = require('multer')
 const {
   imageFilter,
   MAX_LISTENER_IMAGE_SIZE,
-  MAX_ARTIST_IMAGE_SIZE
+  MAX_ARTIST_IMAGE_SIZE,
+  MAX_ALBUM_IMAGE_SIZE
 } = require('./filter')
 
 const storage = multer.diskStorage({
@@ -27,4 +28,12 @@ const uploadArtistImage = multer({
   }
 })
 
-module.exports = { uploadListenerImage, uploadArtistImage }
+const uploadAlbumImage = multer({
+  storage,
+  fileFilter: imageFilter,
+  limits: {
+    fileSize: MAX_ALBUM_IMAGE_SIZE
+  }
+})
+
+module.exports = { uploadListenerImage, uploadArtistImage, uploadAlbumImage }

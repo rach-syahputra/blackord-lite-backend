@@ -1,3 +1,4 @@
+const { ResponseError } = require('../../utils/error/response-error')
 const albumService = require('./album.service')
 
 const albumController = {
@@ -31,8 +32,13 @@ const albumController = {
 
   async addAlbum(req, res, next) {
     try {
+      if (!req.file) {
+        throw new ResponseError(400, 'Image file is required')
+      }
+
       const albumData = req.body
       albumData.artistUsername = req.username
+      albumData.imageFile = req.file
 
       const album = await albumService.addAlbum(albumData)
 

@@ -12,5 +12,11 @@ const imageFilter = (req, file, cb) => {
 
 const MAX_LISTENER_IMAGE_SIZE = 2000000 // 2mb
 const MAX_ARTIST_IMAGE_SIZE = 5000000 // 5mb
+const MAX_ALBUM_IMAGE_SIZE = 5000000 // 5mb
 
-module.exports = { imageFilter, MAX_LISTENER_IMAGE_SIZE, MAX_ARTIST_IMAGE_SIZE }
+module.exports = {
+  imageFilter,
+  MAX_LISTENER_IMAGE_SIZE,
+  MAX_ARTIST_IMAGE_SIZE,
+  MAX_ALBUM_IMAGE_SIZE
+}
