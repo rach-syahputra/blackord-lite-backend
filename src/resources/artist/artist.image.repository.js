@@ -3,7 +3,7 @@ const cloudinary = require('../../utils/cloudinary')
 const artistImageRepository = {
   async uploadArtistImage(image) {
     const artistImage = await cloudinary.uploader.upload(image, {
-      folder: process.env.CLOUDINARY_ARTIST_IMAGE_FOLDER
+      folder: 'artist-images'
     })
 
     return artistImage
