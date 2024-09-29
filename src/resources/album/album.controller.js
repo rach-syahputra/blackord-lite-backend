@@ -53,9 +53,10 @@ const albumController = {
 
   async deleteAlbum(req, res, next) {
     try {
+      const tokenUsername = req.username
       const albumId = req.params.id
 
-      await albumService.checkAlbumOwner(albumId)
+      await albumService.checkAlbumOwner(tokenUsername, albumId)
       await albumService.deleteAlbum(albumId)
 
       res.status(200).json({
