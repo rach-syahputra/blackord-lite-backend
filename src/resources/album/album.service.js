@@ -35,7 +35,9 @@ const albumService = {
   },
 
   async deleteAlbum(albumId) {
-    await this.getAlbum(albumId)
+    const album = await this.getAlbum(albumId)
+    await this.deleteAlbumImage(album.image)
+
     await albumRepository.deleteAlbumById(albumId)
   },
 
@@ -57,7 +59,7 @@ const albumService = {
     const publicId = getCloudinaryPublicId(image)
 
     const previousAlbumImageDeleted =
-      await albumImageRepository.deleteArtistImage(publicId)
+      await albumImageRepository.deleteAlbumImage(publicId)
     if (!previousAlbumImageDeleted)
       throw new ResponseError(422, 'Image not deleted')
   }
