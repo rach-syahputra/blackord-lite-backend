@@ -1,23 +1,13 @@
 const prisma = require('../../utils/db')
 
 const artistRepository = {
-  async findUserByUsername(username) {
-    const user = await prisma.user.findUnique({
-      where: {
-        username
-      }
-    })
-
-    return user
-  },
-
-  async findAllArtists() {
+  async findAll() {
     const artists = await prisma.artist.findMany()
 
     return artists
   },
 
-  async findArtistByUsername(username) {
+  async find(username) {
     const artist = await prisma.artist.findUnique({
       where: {
         username
@@ -27,7 +17,7 @@ const artistRepository = {
     return artist
   },
 
-  async createArtist(artistData) {
+  async create(artistData) {
     const artist = await prisma.artist.create({
       data: {
         username: artistData.username,
@@ -40,7 +30,7 @@ const artistRepository = {
     return artist
   },
 
-  async updateArtistByUsername(username, artistData) {
+  async update(username, artistData) {
     const artist = await prisma.artist.update({
       where: {
         username

@@ -1,7 +1,7 @@
 const cloudinary = require('../../utils/cloudinary')
 
 const artistImageRepository = {
-  async uploadArtistImage(image) {
+  async upload(image) {
     const artistImage = await cloudinary.uploader.upload(image, {
       folder: 'artist-images'
     })
@@ -9,7 +9,7 @@ const artistImageRepository = {
     return artistImage
   },
 
-  async deleteArtistImage(image) {
+  async delete(image) {
     const artistImage = await cloudinary.uploader.destroy(image)
 
     return artistImage
