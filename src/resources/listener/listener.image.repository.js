@@ -1,7 +1,7 @@
 const cloudinary = require('../../utils/cloudinary')
 
 const listenerImageRepository = {
-  async uploadListenerImage(image) {
+  async upload(image) {
     const listenerImage = await cloudinary.uploader.upload(image, {
       folder: 'listener-images'
     })
@@ -9,7 +9,7 @@ const listenerImageRepository = {
     return listenerImage
   },
 
-  async deleteListenerImage(publicId) {
+  async delete(publicId) {
     const listenerImage = await cloudinary.uploader.destroy(publicId)
 
     return listenerImage

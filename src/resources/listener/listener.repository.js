@@ -1,7 +1,7 @@
 const prisma = require('../../utils/db')
 
 const listenerRepository = {
-  async findListenerByUsername(username) {
+  async find(username) {
     const listener = await prisma.listener.findUnique({
       where: {
         username
@@ -11,7 +11,7 @@ const listenerRepository = {
     return listener
   },
 
-  async createListener(listenerData) {
+  async create(listenerData) {
     const listener = await prisma.listener.create({
       data: {
         username: listenerData.username,
@@ -22,7 +22,7 @@ const listenerRepository = {
     return listener
   },
 
-  async updateListenerByUsername(username, listenerData) {
+  async update(username, listenerData) {
     const listener = await prisma.listener.update({
       where: {
         username

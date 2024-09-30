@@ -2,10 +2,10 @@ const { ResponseError } = require('../../utils/error/response-error')
 const listenerService = require('./listener.service')
 
 const listenerController = {
-  async getListener(req, res, next) {
+  async get(req, res, next) {
     try {
       const username = req.params.username
-      const listener = await listenerService.getListener(username)
+      const listener = await listenerService.get(username)
 
       res.status(200).json({
         message: 'Listener successfully retrieved',
@@ -16,7 +16,7 @@ const listenerController = {
     }
   },
 
-  async addListener(req, res, next) {
+  async add(req, res, next) {
     try {
       if (!req.file) {
         throw new ResponseError(400, 'Image file is required')
@@ -25,7 +25,7 @@ const listenerController = {
       const listenerData = req.body
       listenerData.imageFile = req.file
 
-      const listener = await listenerService.addListener(listenerData)
+      const listener = await listenerService.add(listenerData)
 
       res.status(201).json({
         message: 'Listener added successfully',
@@ -36,7 +36,7 @@ const listenerController = {
     }
   },
 
-  async updateListener(req, res, next) {
+  async update(req, res, next) {
     try {
       const tokenUsername = req.username
       const listenerUsername = req.params.username
@@ -51,7 +51,7 @@ const listenerController = {
       const listenerData = req.body
       listenerData.imageFile = req.file
 
-      const listener = await listenerService.updateListener(
+      const listener = await listenerService.update(
         listenerUsername,
         listenerData
       )
