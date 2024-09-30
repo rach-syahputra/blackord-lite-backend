@@ -17,7 +17,11 @@ router.put(
 
 router.get(
   '/:username/favorite-artists',
-  listenerArtistController.getAllFavoriteArtistsFromListener
+  listenerArtistController.getFavoriteArtistsFromListener
+)
+router.get(
+  '/:username/favorite-artists/:artistUsername',
+  listenerArtistController.get
 )
 
 module.exports = router

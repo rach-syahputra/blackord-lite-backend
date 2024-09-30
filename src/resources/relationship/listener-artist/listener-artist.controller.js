@@ -1,7 +1,7 @@
 const listenerArtistService = require('./listener-artist.service')
 
 const listenerArtistController = {
-  async getAllFavoriteArtistsFromListener(req, res, next) {
+  async getFavoriteArtistsFromListener(req, res, next) {
     try {
       const listenerUsername = req.params.username
 
@@ -19,9 +19,9 @@ const listenerArtistController = {
     }
   },
 
-  async getAllFollowersFromArtist(req, res, next) {
+  async getFollowersFromArtist(req, res, next) {
     try {
-      const artistUsername = req.params.id
+      const artistUsername = req.params.username
 
       const followers = await listenerArtistService.getAllFollowersFromArtist(
         artistUsername
@@ -30,6 +30,25 @@ const listenerArtistController = {
       res.status(200).json({
         message: 'Artist followers successfully retrieved',
         data: followers
+      })
+    } catch (error) {
+      next(error)
+    }
+  },
+
+  async get(req, res, next) {
+    try {
+      const listenerUsername = req.params.username
+      const artistUsername = req.params.artistUsername
+
+      const listenerArtist = await listenerArtistService.get(
+        listenerUsername,
+        artistUsername
+      )
+
+      res.status(200).json({
+        message: 'Followed artist successfully retrieved',
+        data: listenerArtist
       })
     } catch (error) {
       next(error)

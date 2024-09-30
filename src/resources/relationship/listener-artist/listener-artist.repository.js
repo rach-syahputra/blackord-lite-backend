@@ -35,7 +35,7 @@ const listenerArtistRepository = {
       }
     })
 
-    return listenerArtist
+    return listenerArtist[0]
   },
 
   async create(listenerUsername, artistUsername) {

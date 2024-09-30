@@ -18,7 +18,7 @@ router.put(
 
 router.get(
   '/:username/followers',
-  listenerArtistController.getAllFollowersFromArtist
+  listenerArtistController.getFollowersFromArtist
 )
 router.post('/:username/follow', verifyToken, listenerArtistController.add)
 router.post('/:username/unfollow', verifyToken, listenerArtistController.delete)
