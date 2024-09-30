@@ -36,12 +36,12 @@ const listenerArtistController = {
     }
   },
 
-  async addFollowedArtist(req, res, next) {
+  async add(req, res, next) {
     try {
       const listenerUsername = req.username
       const artistUsername = req.params.username
 
-      const followedArtist = await listenerArtistService.addFollowedArtist(
+      const followedArtist = await listenerArtistService.add(
         listenerUsername,
         artistUsername
       )
@@ -55,15 +55,12 @@ const listenerArtistController = {
     }
   },
 
-  async deleteFollowedArtist(req, res, next) {
+  async delete(req, res, next) {
     try {
       const listenerUsername = req.username
       const artistUsername = req.params.username
 
-      await listenerArtistService.deleteFollowedArtist(
-        listenerUsername,
-        artistUsername
-      )
+      await listenerArtistService.delete(listenerUsername, artistUsername)
 
       res.status(200).json({
         message: 'Artist successfully unfollowed'

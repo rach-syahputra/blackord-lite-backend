@@ -1,7 +1,7 @@
 const prisma = require('../../../utils/db')
 
 const listenerArtistRepository = {
-  async findAllFavoriteArtistsFromListener(listenerUsername) {
+  async findFavoriteArtistsFromListener(listenerUsername) {
     const favoriteArtists = await prisma.listenerArtist.findMany({
       where: {
         listenerUsername
@@ -14,7 +14,7 @@ const listenerArtistRepository = {
     return favoriteArtists
   },
 
-  async findAllFollowersFromArtist(artistUsername) {
+  async findFollowersFromArtist(artistUsername) {
     const followers = await prisma.listenerArtist.findMany({
       where: {
         artistUsername
@@ -27,18 +27,18 @@ const listenerArtistRepository = {
     return followers
   },
 
-  async findFollowedArtist(listenerUsername, artistUsername) {
-    const followedArtist = await prisma.listenerArtist.findMany({
+  async find(listenerUsername, artistUsername) {
+    const listenerArtist = await prisma.listenerArtist.findMany({
       where: {
         listenerUsername,
         artistUsername
       }
     })
 
-    return followedArtist
+    return listenerArtist
   },
 
-  async createListenerArtist(listenerUsername, artistUsername) {
+  async create(listenerUsername, artistUsername) {
     const listenerArtist = await prisma.listenerArtist.create({
       data: {
         listenerUsername,
@@ -49,7 +49,7 @@ const listenerArtistRepository = {
     return listenerArtist
   },
 
-  async deleteListenerArtist(listenerUsername, artistUsername) {
+  async delete(listenerUsername, artistUsername) {
     const listenerArtist = await prisma.listenerArtist.delete({
       where: {
         listenerUsername_artistUsername: {

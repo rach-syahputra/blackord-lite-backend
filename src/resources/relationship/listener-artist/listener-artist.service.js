@@ -4,7 +4,7 @@ const listenerArtistRepository = require('./listener-artist.repository')
 const listenerArtistService = {
   async getAllFavoriteArtistsFromListener(listenerUsername) {
     const response =
-      await listenerArtistRepository.findAllFavoriteArtistsFromListener(
+      await listenerArtistRepository.findFavoriteArtistsFromListener(
         listenerUsername
       )
 
@@ -14,7 +14,7 @@ const listenerArtistService = {
   },
 
   async getAllFollowersFromArtist(artistUsername) {
-    const response = await listenerArtistRepository.findAllFollowersFromArtist(
+    const response = await listenerArtistRepository.findFollowersFromArtist(
       artistUsername
     )
 
@@ -23,8 +23,8 @@ const listenerArtistService = {
     return followers
   },
 
-  async getFollowedArtist(listenerUsername, artistUsername) {
-    const followedArtist = await listenerArtistRepository.findFollowedArtist(
+  async get(listenerUsername, artistUsername) {
+    const followedArtist = await listenerArtistRepository.find(
       listenerUsername,
       artistUsername
     )
@@ -35,8 +35,8 @@ const listenerArtistService = {
     return followedArtist
   },
 
-  async addFollowedArtist(listenerUsername, artistUsername) {
-    const followedArtist = await listenerArtistRepository.createListenerArtist(
+  async add(listenerUsername, artistUsername) {
+    const followedArtist = await listenerArtistRepository.create(
       listenerUsername,
       artistUsername
     )
@@ -44,12 +44,9 @@ const listenerArtistService = {
     return followedArtist.artistUsername
   },
 
-  async deleteFollowedArtist(listenerUsername, artistUsername) {
-    await this.getFollowedArtist(listenerUsername, artistUsername)
-    await listenerArtistRepository.deleteListenerArtist(
-      listenerUsername,
-      artistUsername
-    )
+  async delete(listenerUsername, artistUsername) {
+    await this.get(listenerUsername, artistUsername)
+    await listenerArtistRepository.delete(listenerUsername, artistUsername)
   }
 }
 

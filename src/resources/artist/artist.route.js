@@ -20,15 +20,7 @@ router.get(
   '/:username/followers',
   listenerArtistController.getAllFollowersFromArtist
 )
-router.post(
-  '/:username/follow',
-  verifyToken,
-  listenerArtistController.addFollowedArtist
-)
-router.post(
-  '/:username/unfollow',
-  verifyToken,
-  listenerArtistController.deleteFollowedArtist
-)
+router.post('/:username/follow', verifyToken, listenerArtistController.add)
+router.post('/:username/unfollow', verifyToken, listenerArtistController.delete)
 
 module.exports = router
