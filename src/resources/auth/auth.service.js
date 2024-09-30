@@ -28,7 +28,7 @@ const authService = {
     const accessToken = await putAccessToken({ username, email, roleId })
     const refreshToken = await putRefreshToken({ username, email, roleId })
 
-    await userService.updateUser(username, { refreshToken })
+    await userService.update(username, { refreshToken })
 
     return {
       accessToken,
@@ -58,7 +58,7 @@ const authService = {
   async logout(refreshToken) {
     const user = await this.getUserByRefreshToken(refreshToken)
 
-    const updatedUser = await userService.updateUser(user.username, {
+    const updatedUser = await userService.update(user.username, {
       refreshToken: ''
     })
 

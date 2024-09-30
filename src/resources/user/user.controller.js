@@ -2,9 +2,9 @@ const { ResponseError } = require('../../utils/error/response-error')
 const userService = require('./user.service')
 
 const userController = {
-  async getAllUsers(req, res, next) {
+  async getAll(req, res, next) {
     try {
-      const users = await userService.getAllUsers()
+      const users = await userService.getAll()
 
       res.status(200).json({
         message: 'Users successfully retrieved',
@@ -15,10 +15,10 @@ const userController = {
     }
   },
 
-  async getUser(req, res, next) {
+  async get(req, res, next) {
     try {
       const username = req.params.username
-      const user = await userService.getUser(username)
+      const user = await userService.get(username)
 
       res.status(200).json({
         message: 'User successfully retrieved',
@@ -29,11 +29,11 @@ const userController = {
     }
   },
 
-  async addUser(req, res, next) {
+  async add(req, res, next) {
     try {
       const userData = req.body
 
-      const user = await userService.addUser(userData)
+      const user = await userService.add(userData)
 
       res.status(201).json({
         message: 'User added successfully',
@@ -44,7 +44,7 @@ const userController = {
     }
   },
 
-  async updateUser(req, res, next) {
+  async update(req, res, next) {
     try {
       const tokenUsername = req.username
       const username = req.params.username
@@ -54,7 +54,7 @@ const userController = {
 
       const userData = req.body
 
-      const user = await userService.updateUser(username, userData)
+      const user = await userService.update(username, userData)
 
       res.status(200).json({
         message: 'User updated successfully',
@@ -65,7 +65,7 @@ const userController = {
     }
   },
 
-  async deleteUser(req, res, next) {
+  async delete(req, res, next) {
     try {
       const tokenUsername = req.username
       const username = req.params.username
@@ -73,7 +73,7 @@ const userController = {
         throw new ResponseError(401, 'You are unauthorized')
       }
 
-      await userService.deleteUser(username)
+      await userService.delete(username)
 
       res.status(200).json({
         message: 'User deleted successfully'

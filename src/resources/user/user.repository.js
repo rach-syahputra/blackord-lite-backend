@@ -1,7 +1,7 @@
 const prisma = require('../../utils/db')
 
 const userRepository = {
-  async findAllUsers() {
+  async findAll() {
     const users = await prisma.user.findMany({
       select: {
         username: true,
@@ -17,7 +17,7 @@ const userRepository = {
     return users
   },
 
-  async findUserByUsername(username) {
+  async find(username) {
     const user = await prisma.user.findUnique({
       where: {
         username
@@ -33,7 +33,7 @@ const userRepository = {
     return user
   },
 
-  async createUser(userData) {
+  async create(userData) {
     const user = await prisma.user.create({
       data: {
         username: userData.username,
@@ -47,7 +47,7 @@ const userRepository = {
     return user
   },
 
-  async updateUserByUsername(username, userData) {
+  async update(username, userData) {
     const user = await prisma.user.update({
       where: {
         username
@@ -62,7 +62,7 @@ const userRepository = {
     return user
   },
 
-  async deleteUserByUsername(username) {
+  async delete(username) {
     await prisma.user.delete({
       where: {
         username
