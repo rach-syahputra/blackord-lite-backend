@@ -2,7 +2,7 @@ const prisma = require('../../utils/db')
 const { v4: uuidv4 } = require('uuid')
 
 const songRepository = {
-  async findSongsByAlbumId(albumId) {
+  async findByAlbum(albumId) {
     const songs = await prisma.song.findMany({
       where: {
         albumId
@@ -15,7 +15,7 @@ const songRepository = {
     return songs
   },
 
-  async findSongById(songId) {
+  async find(songId) {
     const song = await prisma.song.findUnique({
       where: {
         id: songId
@@ -25,7 +25,7 @@ const songRepository = {
     return song
   },
 
-  async createSong(songData) {
+  async create(songData) {
     const song = await prisma.song.create({
       data: {
         id: uuidv4(),
@@ -38,7 +38,7 @@ const songRepository = {
     return song
   },
 
-  async deleteSongById(songId) {
+  async delete(songId) {
     await prisma.song.delete({
       where: {
         id: songId

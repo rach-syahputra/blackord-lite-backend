@@ -6,36 +6,36 @@ const { validate } = require('../../utils/validation/validation')
 const { AddSongSchema } = require('./song.validation')
 
 const songService = {
-  async getSongsFromAlbum(albumId) {
-    const songs = await songRepository.findSongsByAlbumId(albumId)
+  async getFromAlbum(albumId) {
+    const songs = await songRepository.findByAlbum(albumId)
 
     return songs
   },
 
-  async getSong(songId) {
-    const song = await songRepository.findSongById(songId)
+  async get(songId) {
+    const song = await songRepository.find(songId)
     if (!song) throw new ResponseError(404, 'Song not found')
 
     return song
   },
 
-  async addSong(songData) {
+  async add(songData) {
     validate(AddSongSchema, songData)
 
-    const song = await songRepository.createSong(songData)
+    const song = await songRepository.create(songData)
 
     return song
   },
 
-  async deleteSong(songId) {
-    await this.getSong(songId)
-    await songRepository.deleteSongById(songId)
+  async delete(songId) {
+    await this.get(songId)
+    await songRepository.delete(songId)
   },
 
-  async checkSongOwner(tokenUsername, songId) {
-    const song = await this.getSong(songId)
-    const album = await albumService.getAlbum(song.albumId)
-    const artist = await artistService.getArtist(album.artistUsername)
+  async checkOwner(tokenUsername, songId) {
+    const song = await this.get(songId)
+    const album = await albumService.get(song.albumId)
+    const artist = await artistService.get(album.artistUsername)
 
     if (tokenUsername !== artist.username)
       throw new ResponseError(401, 'You are unauthorized')
