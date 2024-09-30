@@ -1,7 +1,7 @@
 const prisma = require('../../utils/db')
 
 const albumRepository = {
-  async findAlbumCount(artistUsername) {
+  async findCount(artistUsername) {
     const albumCount = await prisma.album.count({
       where: {
         artistUsername
@@ -11,7 +11,7 @@ const albumRepository = {
     return albumCount
   },
 
-  async findAlbumsByArtistUsername(artistUsername) {
+  async findByArtist(artistUsername) {
     const albums = await prisma.album.findMany({
       where: {
         artistUsername
@@ -24,7 +24,7 @@ const albumRepository = {
     return albums
   },
 
-  async findAlbumById(albumId) {
+  async find(albumId) {
     const album = await prisma.album.findUnique({
       where: {
         id: albumId
@@ -34,8 +34,8 @@ const albumRepository = {
     return album
   },
 
-  async createAlbum(albumData) {
-    const albumCount = await this.findAlbumCount(albumData.artistUsername)
+  async create(albumData) {
+    const albumCount = await this.findCount(albumData.artistUsername)
 
     const album = await prisma.album.create({
       data: {
@@ -52,7 +52,7 @@ const albumRepository = {
     return album
   },
 
-  async deleteAlbumById(albumId) {
+  async delete(albumId) {
     await prisma.album.delete({
       where: {
         id: albumId

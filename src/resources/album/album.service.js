@@ -8,58 +8,57 @@ const {
 } = require('../../utils/cloudinary/cloudinary-public-id')
 
 const albumService = {
-  async getAlbumsFromArtist(artistUsername) {
-    const albums = await albumRepository.findAlbumsByArtistUsername(
-      artistUsername
-    )
+  async getFromArtist(artistUsername) {
+    const albums = await albumRepository.findByArtist(artistUsername)
 
     return albums
   },
 
-  async getAlbum(albumId) {
-    const album = await albumRepository.findAlbumById(albumId)
+  async get(albumId) {
+    const album = await albumRepository.find(albumId)
     if (!album) throw new ResponseError(404, 'Album not found')
 
     return album
   },
 
-  async addAlbum(albumData) {
-    albumData.image = await this.uploadAlbumImage(albumData.imageFile.path)
+  async add(albumData) {
+    albumData.image = await this.uploadImage(albumData.imageFile.path)
     delete albumData.imageFile
 
     validate(AddAlbumSchema, albumData)
 
-    const album = await albumRepository.createAlbum(albumData)
+    const album = await albumRepository.create(albumData)
 
     return album
   },
 
-  async deleteAlbum(albumId) {
-    const album = await this.getAlbum(albumId)
-    await this.deleteAlbumImage(album.image)
+  async delete(albumId) {
+    const album = await this.get(albumId)
+    await this.deleteImage(album.image)
 
-    await albumRepository.deleteAlbumById(albumId)
+    await albumRepository.delete(albumId)
   },
 
-  async checkAlbumOwner(tokenUsername, albumId) {
-    const album = await this.getAlbum(albumId)
+  async checkOwner(tokenUsername, albumId) {
+    const album = await this.get(albumId)
 
     if (tokenUsername !== album.artistUsername)
       throw new ResponseError(401, 'You are unauthorized')
   },
 
-  async uploadAlbumImage(image) {
-    const albumImage = await albumImageRepository.uploadAlbumImage(image)
+  async uploadImage(image) {
+    const albumImage = await albumImageRepository.upload(image)
     if (!albumImage) throw new ResponseError(422, 'Image not uploaded')
 
     return albumImage.secure_url
   },
 
-  async deleteAlbumImage(image) {
+  async deleteImage(image) {
     const publicId = getCloudinaryPublicId(image)
 
-    const previousAlbumImageDeleted =
-      await albumImageRepository.deleteAlbumImage(publicId)
+    const previousAlbumImageDeleted = await albumImageRepository.delete(
+      publicId
+    )
     if (!previousAlbumImageDeleted)
       throw new ResponseError(422, 'Image not deleted')
   }

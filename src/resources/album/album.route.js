@@ -5,14 +5,14 @@ const { uploadAlbumImage } = require('../../utils/multer')
 
 const router = express.Router()
 
-router.get('/artists/:username', albumController.getAlbumsFromArtist)
-router.get('/:id', albumController.getAlbum)
+router.get('/artists/:username', albumController.getFromArtist)
+router.get('/:id', albumController.get)
 router.post(
   '/',
   verifyToken,
   uploadAlbumImage.single('image'),
-  albumController.addAlbum
+  albumController.add
 )
-router.delete('/:id', verifyToken, albumController.deleteAlbum)
+router.delete('/:id', verifyToken, albumController.delete)
 
 module.exports = router
