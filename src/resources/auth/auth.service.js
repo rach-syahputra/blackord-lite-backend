@@ -76,11 +76,11 @@ const authService = {
 
   async getCurrentUser(userData) {
     if (userData.roleId === 1) {
-      const listener = await listenerService.getListener(userData.username)
+      const listener = await listenerService.get(userData.username)
 
       return listener
     } else if (userData.roleId === 2) {
-      const artist = await artistService.getArtist(userData.username)
+      const artist = await artistService.get(userData.username)
 
       return artist
     }
