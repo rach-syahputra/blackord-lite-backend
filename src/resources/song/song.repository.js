@@ -31,7 +31,8 @@ const songRepository = {
         id: uuidv4(),
         albumId: songData.albumId,
         title: songData.title,
-        duration: songData.duration
+        duration: songData.duration,
+        songPath: songData.songPath
       }
     })
 

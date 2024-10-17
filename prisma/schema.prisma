@@ -64,6 +64,7 @@ model Song {
   album    Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
   albumId  String
   title    String
+  songPath String
   duration Int
 }
 
